@@ -34,10 +34,10 @@ func main() {
 
 func getLicenses(softwareSelect string) {
 	license := fetchLicense(softwareSelect) // Find and Choose Versions of software based on license
+
 	softwareConfig := constructData(softwareSelect, license) // generate proper data for select license version
-	for _, i := range softwareConfig.directories {
-		fmt.Println(i)
-	}
+
+	chooseAction(softwareConfig)
 }
 
 // Allow user to choose which licence to start working with.
@@ -49,34 +49,36 @@ func chooseLicense(softwareName string, licenses []string) string {
 	return pickedLicense // return string with 4 digits representing the application license year.
 }
 
-//func chooseAction(softwareName string, config workingData) {
-//	items := []string{"Clean Application", "Replace License"}
-//	choice, _, err := dlgs.List("Chose your action", "What would you like to do?", items)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//
-//	switch choice {
-//	case "Replace License":
-//		//replaceLicense(config)
-//	}
-//}
+func chooseAction(config workingData) {
+	items := []string{"Clean Application", "Replace License"}
+	choice, _, err := dlgs.List("Chose your action", "What would you like to do?", items)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-//func replaceLicense(config workingData) string {
-//	licnese := getLicense(config)
-//	return licnese
-//}
+	switch choice {
+	case "Replace License":
+		replaceLicense(config)
+	}
+}
+
+func replaceLicense(config workingData) {
+	getLicense(config)
+	//return licnese
+}
 
 //func testing(config workingData) string {
 //	currentUser, err := user.Current()
 //	if err != nil {
 //		log.Fatal(err)
 //	}
+//	UserID := currentUser.Gid
+//	fmt.Println(UserID)
 //
-//	userUIDStr := currentUser.Uid[4:4]
-//	uid, err := strconv.Atoi(userUIDStr)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	return string(rune(uid))
+//	//userUIDStr := currentUser.Uid[4:4]
+//	//uid, err := strconv.Atoi(userUIDStr)
+//	//if err != nil {
+//	//	log.Fatal(err)
+//	//}
+//	//return string(rune(uid))
 //}

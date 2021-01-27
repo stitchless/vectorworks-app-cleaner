@@ -1,14 +1,17 @@
 package main
 
 import (
+	"log"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func constructData(softwareSelect string, licenseYear string) workingData {
 	// define system variables
 	winAppData := os.Getenv("APPDATA") + "\\"
 	winLocalAppData := os.Getenv("LOCALAPPDATA") + "\\"
-	appVersion := doTheMath(licenseYear)
+	appVersion := convertYearToVersion(licenseYear)
 
 	if softwareSelect == "Vectorworks" { // Run if Vectorworks was picked
 		license := "SOFTWARE\\Nemetschek\\Vectorworks " + appVersion + "\\Registration"
@@ -52,4 +55,17 @@ func constructData(softwareSelect string, licenseYear string) workingData {
 			directories: directories,
 		}
 	}
+}
+
+// convert Software License year to version number.
+func convertYearToVersion(appYear string) string {
+	values := strings.Split(appYear, "")[2:4]
+	appVersion := values[0] + values[1]
+	i, err := strconv.Atoi(appVersion)
+	if err != nil {
+		log.Fatal(err)
+	}
+	versionMath := i + 6
+	appVersion = strconv.Itoa(versionMath)
+	return appVersion
 }
