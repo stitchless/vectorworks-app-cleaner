@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gen2brain/dlgs"
 	"log"
 	"os"
@@ -10,9 +9,9 @@ import (
 // Data
 type softwareConfig struct {
 	plist       []string
-	registry	[]string
+	registry    []string
 	directories []string
-	license		string
+	license     string
 }
 
 // Home Directory OS dependent
@@ -20,24 +19,18 @@ var homeDir, _ = os.UserHomeDir()
 
 func main() {
 	// Start by picking between "Vectorworks" and "Vision"
-	softwareSelect, closeDiag, err := dlgs.List("Vectorworks, Inc. - App Cleaner", "What software package are you attempting to edit?", []string{"Vectorworks", "Vision"})
+	softwareName, cancelDiag, err := dlgs.List("Vectorworks, Inc. - App Cleaner", "What software package are you attempting to edit?", []string{"Vectorworks", "Vision"})
 	if err != nil {
-		panic(err)
+		log.Fatalf("cannot use the dialog as expected: %e", err)
 	}
 
-	if !closeDiag {
-		fmt.Println("Closed by user...")
+	if !cancelDiag {
+		log.Print("Closed by user...")
 	}
 
-	getLicenses(softwareSelect)
-}
-
-func getLicenses(softwareSelect string) {
-	license := fetchLicense(softwareSelect) // Find and Choose Versions of software based on license
-
-	softwareConfig := constructData(softwareSelect, license) // generate proper data for select license version
-
-	chooseAction(softwareConfig)
+	license := FindAndChooseLicense(softwareName)   // Find and Choose Versions of software based on license
+	config := generateConfig(softwareName, license) // generate proper data for select license version
+	chooseAction(config)
 }
 
 // Allow user to choose which licence to start working with.
@@ -62,23 +55,10 @@ func chooseAction(config softwareConfig) {
 	}
 }
 
+// TODO: Implement.
 func replaceLicense(config softwareConfig) {
-	getLicense(config)
-	//return licnese
+	getLicense(config) // Finished
+	// TODO: SHow Dialog user input
+	// TODO: regex to confirm format
+	// TODO: Replace existing License
 }
-
-//func testing(config softwareConfig) string {
-//	currentUser, err := user.Current()
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	UserID := currentUser.Gid
-//	fmt.Println(UserID)
-//
-//	//userUIDStr := currentUser.Uid[4:4]
-//	//uid, err := strconv.Atoi(userUIDStr)
-//	//if err != nil {
-//	//	log.Fatal(err)
-//	//}
-//	//return string(rune(uid))
-//}

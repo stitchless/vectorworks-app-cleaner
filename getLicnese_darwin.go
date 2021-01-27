@@ -19,7 +19,7 @@ func fetchLicense(softwareName string) string {
 
 	// returns all license year numbers found in plist file names from the files variable
 	for _, f := range files {
-		file := strings.Contains(f.Name(), strings.ToLower(softwareName) + ".license.")
+		file := strings.Contains(f.Name(), strings.ToLower(softwareName)+".license.")
 
 		if file {
 			appYear := re.FindAllString(f.Name(), -1)
@@ -28,5 +28,3 @@ func fetchLicense(softwareName string) string {
 	}
 	return chooseLicense(softwareName, licenses)
 }
-
-

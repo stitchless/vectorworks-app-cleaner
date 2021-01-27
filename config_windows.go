@@ -7,24 +7,24 @@ import (
 	"strings"
 )
 
-func constructData(softwareSelect string, licenseYear string) softwareConfig {
+func generateConfig(softwareName string, licenseYear string) softwareConfig {
 	// define system variables
 	winAppData := os.Getenv("APPDATA") + "\\"
 	winLocalAppData := os.Getenv("LOCALAPPDATA") + "\\"
 	appVersion := convertYearToVersion(licenseYear)
 
-	if softwareSelect == "Vectorworks" { // Run if Vectorworks was picked
+	if softwareName == "Vectorworks" { // Run if Vectorworks was picked
 		license := "SOFTWARE\\Nemetschek\\Vectorworks " + appVersion + "\\Registration"
 		registry := []string{
 			"SOFTWARE\\Nemetschek\\Vectorworks " + appVersion,
 			"SOFTWARE\\VectorWorks",
 		}
 		directories := []string{
-			winAppData + softwareSelect + "\\" + licenseYear,
-			winAppData + softwareSelect + " " + licenseYear + " Installer",
-			winAppData + softwareSelect + " " + licenseYear + " Updater",
-			winAppData + "Nemetschek\\" + softwareSelect + "\\" + licenseYear,
-			winAppData + "Nemetschek\\" + softwareSelect + "\\accounts",
+			winAppData + softwareName + "\\" + licenseYear,
+			winAppData + softwareName + " " + licenseYear + " Installer",
+			winAppData + softwareName + " " + licenseYear + " Updater",
+			winAppData + "Nemetschek\\" + softwareName + "\\" + licenseYear,
+			winAppData + "Nemetschek\\" + softwareName + "\\accounts",
 			winAppData + "Nemetschek\\Vectorworks RMCache\\rm" + licenseYear,
 			winAppData + "Nemetschek\\Vectorworks Web Cache",
 			winAppData + "vectorworks-installer",
@@ -38,9 +38,9 @@ func constructData(softwareSelect string, licenseYear string) softwareConfig {
 		}
 
 		return softwareConfig{
-			registry: registry,
+			registry:    registry,
 			directories: directories,
-			license: license,
+			license:     license,
 		}
 
 	} else { // Run if Vision was picked
@@ -51,7 +51,7 @@ func constructData(softwareSelect string, licenseYear string) softwareConfig {
 			"",
 		}
 		return softwareConfig{
-			registry: registry,
+			registry:    registry,
 			directories: directories,
 		}
 	}

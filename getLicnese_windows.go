@@ -9,12 +9,12 @@ import (
 	"regexp"
 )
 
-func fetchLicense(softwareSelect string) string {
+func FindAndChooseLicense(softwareName string) string {
 	var licenses []string
 
 	re := regexp.MustCompile("[0-9]+")
 
-	folders, err := ioutil.ReadDir(os.Getenv("APPDATA") + "/" + softwareSelect)
+	folders, err := ioutil.ReadDir(os.Getenv("APPDATA") + "/" + softwareName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -23,10 +23,10 @@ func fetchLicense(softwareSelect string) string {
 		appYear := re.FindString(f.Name())
 		licenses = append(licenses, appYear)
 	}
-	return chooseLicense(softwareSelect, licenses)
+	return chooseLicense(softwareName, licenses)
 }
 
-func getLicense(config softwareConfig)  {
+func getLicense(config softwareConfig) {
 	key, err := registry.OpenKey(registry.CURRENT_USER, config.license, registry.QUERY_VALUE)
 	if err != nil {
 		log.Fatal(err)

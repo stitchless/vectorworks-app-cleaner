@@ -1,8 +1,7 @@
 package main
 
-
-func constructData(softwareSelect string, licenseYear string) softwareConfig {
-	if softwareSelect == "Vectorworks" { // Run if Vectorworks was picked
+func constructData(softwareName string, licenseYear string) softwareConfig {
+	if softwareName == "Vectorworks" { // Run if Vectorworks was picked
 		license := "net.nemetschek.vectorworks.license." + licenseYear + ".plist"
 		plist := []string{
 			"net.nemetschek.vectorworks.license." + licenseYear + ".plist",
@@ -21,9 +20,9 @@ func constructData(softwareSelect string, licenseYear string) softwareConfig {
 		}
 
 		return softwareConfig{
-			plist: plist,
+			plist:       plist,
 			directories: directories,
-			license: license,
+			license:     license,
 		}
 
 	} else { // Run if Vision was picked
@@ -60,9 +59,9 @@ func constructData(softwareSelect string, licenseYear string) softwareConfig {
 		}
 
 		return softwareConfig{
-			plist: plist,
+			plist:       plist,
 			directories: directories,
-			license: license,
+			license:     license,
 		}
 	}
 }
