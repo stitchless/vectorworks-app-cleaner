@@ -26,7 +26,7 @@ func fetchLicense(softwareSelect string) string {
 	return chooseLicense(softwareSelect, licenses)
 }
 
-func getLicense(config workingData)  {
+func getLicense(config softwareConfig)  {
 	key, err := registry.OpenKey(registry.CURRENT_USER, config.license, registry.QUERY_VALUE)
 	if err != nil {
 		log.Fatal(err)

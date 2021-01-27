@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func constructData(softwareSelect string, licenseYear string) workingData {
+func constructData(softwareSelect string, licenseYear string) softwareConfig {
 	// define system variables
 	winAppData := os.Getenv("APPDATA") + "\\"
 	winLocalAppData := os.Getenv("LOCALAPPDATA") + "\\"
@@ -37,7 +37,7 @@ func constructData(softwareSelect string, licenseYear string) workingData {
 			winLocalAppData + "Nemetschek",
 		}
 
-		return workingData{
+		return softwareConfig{
 			registry: registry,
 			directories: directories,
 			license: license,
@@ -50,7 +50,7 @@ func constructData(softwareSelect string, licenseYear string) workingData {
 		directories := []string{
 			"",
 		}
-		return workingData{
+		return softwareConfig{
 			registry: registry,
 			directories: directories,
 		}

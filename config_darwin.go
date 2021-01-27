@@ -1,7 +1,7 @@
 package main
 
 
-func constructData(softwareSelect string, licenseYear string) workingData {
+func constructData(softwareSelect string, licenseYear string) softwareConfig {
 	if softwareSelect == "Vectorworks" { // Run if Vectorworks was picked
 		license := "net.nemetschek.vectorworks.license." + licenseYear + ".plist"
 		plist := []string{
@@ -20,7 +20,7 @@ func constructData(softwareSelect string, licenseYear string) workingData {
 			homeDir + "/Library/Application\\ Support/vectorworks-installer-wrapper",
 		}
 
-		return workingData{
+		return softwareConfig{
 			plist: plist,
 			directories: directories,
 			license: license,
@@ -59,7 +59,7 @@ func constructData(softwareSelect string, licenseYear string) workingData {
 			"/Library/Frameworks/setup_qt_frameworks.sh",
 		}
 
-		return workingData{
+		return softwareConfig{
 			plist: plist,
 			directories: directories,
 			license: license,

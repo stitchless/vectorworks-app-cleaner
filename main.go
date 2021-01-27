@@ -8,7 +8,7 @@ import (
 )
 
 // Data
-type workingData struct {
+type softwareConfig struct {
 	plist       []string
 	registry	[]string
 	directories []string
@@ -49,7 +49,7 @@ func chooseLicense(softwareName string, licenses []string) string {
 	return pickedLicense // return string with 4 digits representing the application license year.
 }
 
-func chooseAction(config workingData) {
+func chooseAction(config softwareConfig) {
 	items := []string{"Clean Application", "Replace License"}
 	choice, _, err := dlgs.List("Chose your action", "What would you like to do?", items)
 	if err != nil {
@@ -62,12 +62,12 @@ func chooseAction(config workingData) {
 	}
 }
 
-func replaceLicense(config workingData) {
+func replaceLicense(config softwareConfig) {
 	getLicense(config)
 	//return licnese
 }
 
-//func testing(config workingData) string {
+//func testing(config softwareConfig) string {
 //	currentUser, err := user.Current()
 //	if err != nil {
 //		log.Fatal(err)
