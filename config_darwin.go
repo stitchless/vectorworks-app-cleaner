@@ -1,6 +1,7 @@
 package main
 
-func macData(softwareSelect string, licenseYear string) workingData {
+
+func constructData(softwareSelect string, licenseYear string) workingData {
 	if softwareSelect == "Vectorworks" { // Run if Vectorworks was picked
 		license := "net.nemetschek.vectorworks.license." + licenseYear + ".plist"
 		plist := []string{

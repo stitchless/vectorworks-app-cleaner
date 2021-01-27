@@ -1,13 +1,10 @@
 package main
 
 import (
-	"log"
 	"os"
-	"strconv"
-	"strings"
 )
 
-func winData(softwareSelect string, licenseYear string) workingData {
+func constructData(softwareSelect string, licenseYear string) workingData {
 	// define system variables
 	winAppData := os.Getenv("APPDATA") + "\\"
 	winLocalAppData := os.Getenv("LOCALAPPDATA") + "\\"
@@ -55,17 +52,4 @@ func winData(softwareSelect string, licenseYear string) workingData {
 			directories: directories,
 		}
 	}
-}
-
-// convert Software License year to version number.
-func doTheMath(appYear string) string {
-	values := strings.Split(appYear, "")[2:4]
-	appVersion := values[0] + values[1]
-	i, err := strconv.Atoi(appVersion)
-	if err != nil {
-		log.Fatal(err)
-	}
-	versionMath := i + 6
-	appVersion = strconv.Itoa(versionMath)
-	return appVersion
 }
