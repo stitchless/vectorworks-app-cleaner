@@ -50,15 +50,13 @@ func chooseAction(config softwareConfig) {
 	}
 
 	switch choice {
+	// Replace old license with new one
 	case "Replace License":
-		replaceLicense(config)
+		serial := getSerial(config)
+		newSerial := inputNewSerial(serial)
+		replaceOldSerial(newSerial, config)
+	// Removes all properties and files/folders for the given software/version
+	case "Clean Application":
+		cleanApplication(config)
 	}
-}
-
-// TODO: Implement.
-func replaceLicense(config softwareConfig) {
-	getLicense(config) // Finished
-	// TODO: SHow Dialog user input
-	// TODO: regex to confirm format
-	// TODO: Replace existing License
 }

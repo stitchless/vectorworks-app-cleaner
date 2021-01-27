@@ -65,7 +65,7 @@ func convertYearToVersion(appYear string) string {
 	if err != nil {
 		log.Fatal(err)
 	}
-	versionMath := i + 6
+	versionMath := i + 5
 	appVersion = strconv.Itoa(versionMath)
 	return appVersion
 }

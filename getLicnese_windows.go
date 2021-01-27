@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"github.com/gen2brain/dlgs"
 	"golang.org/x/sys/windows/registry"
 	"io/ioutil"
 	"log"
@@ -26,7 +26,7 @@ func FindAndChooseLicense(softwareName string) string {
 	return chooseLicense(softwareName, licenses)
 }
 
-func getLicense(config softwareConfig) {
+func getSerial(config softwareConfig) string {
 	key, err := registry.OpenKey(registry.CURRENT_USER, config.license, registry.QUERY_VALUE)
 	if err != nil {
 		log.Fatal(err)
@@ -39,12 +39,43 @@ func getLicense(config softwareConfig) {
 		}
 	}()
 
-	s, _, err := key.GetStringValue("User Serial Number")
+	serial, _, err := key.GetStringValue("User Serial Number")
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("License is: %q\n", s)
-	err = key.Close()
+	// TESTING
+	// TODO: Remove Printf
+	//fmt.Printf("License is: %q\n", serial)
+	//err = key.Close()
+	//if err != nil {
+	//	log.Fatalf("Error Closing Registry: %e", err)
+	//}
+	return serial
+}
+
+func inputNewSerial(serial string) string {
+	newSerial, _, err := dlgs.Entry("Input New Serial", "Please input a new Series E Serial:", serial)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return newSerial
+}
+
+func replaceOldSerial(newSerial string, config softwareConfig) {
+	// TODO: Clean the input before replacing.
+	key, err := registry.OpenKey(registry.CURRENT_USER, config.license, registry.SET_VALUE)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer func() {
+		err := key.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	err = key.SetStringValue("User Serial Number", newSerial)
 	if err != nil {
 		log.Fatal(err)
 	}
