@@ -11,39 +11,41 @@ import (
 	"strings"
 )
 
+// Data
 type workingData struct {
 	plist 		[]string
 	directories	[]string
 }
 
+// Home Directory OS dependent
 var homeDir, _ = os.UserHomeDir()
 
 func main() {
+	// Start by picking between "Vectorworks" and "Vision"
 	softwareSelect, closeDiag, err := dlgs.List("Vectorworks, Inc. - App Cleaner", "What software package are you attempting to edit?", []string{"Vectorworks","Vision"})
 	if err != nil {
 		panic(err)
 	}
 	if !closeDiag{
 		fmt.Println("Closed by user...")
-	} else {
-		getLicenses(softwareSelect)
 	}
+	getLicenses(softwareSelect)
 }
 
 func getLicenses(softwareSelect string){
 	if runtime.GOOS == "darwin" {
-		licenses := getMacLicenses(softwareSelect)
-		license := chooseLicense(softwareSelect, licenses)
-		data := getData(softwareSelect, license)
+		licenses := getMacLicenses(softwareSelect) // Finds and returns all licenses found for selected software
+		license := chooseLicense(softwareSelect, licenses) // Returns a single license version
+		data := getData(softwareSelect, license) // generate proper data for select license version
 		fmt.Println(data.plist[1])
 	} else {
-		// Start working to clean install from Windows
+		//licenses := getWindowsLicenses(softwareSelect)
+		// TODO: Follow same workflow as found above and reuse where I can.
 	}
-	//runSoftware(softwareSelect)
+	// Should I do something here? ... Perhaps handle above differently so it reaches this point.
 }
-/*
 
- */
+
 func getMacLicenses(softwareSelect string) []string {
 	var licenses []string
 	re := regexp.MustCompile("[0-9]+") // Find all digits for plist file names
