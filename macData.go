@@ -2,6 +2,7 @@ package main
 
 func macData(softwareSelect string, licenseYear string) workingData {
 	if softwareSelect == "Vectorworks" { // Run if Vectorworks was picked
+		license := "net.nemetschek.vectorworks.license." + licenseYear + ".plist"
 		plist := []string{
 			"net.nemetschek.vectorworks.license." + licenseYear + ".plist",
 			"net.nemetschek.vectorworks." + licenseYear + ".plist",
@@ -21,9 +22,11 @@ func macData(softwareSelect string, licenseYear string) workingData {
 		return workingData{
 			plist: plist,
 			directories: directories,
+			license: license,
 		}
 
 	} else { // Run if Vision was picked
+		license := "com.vwvision.Vision" + licenseYear + ".plist"
 		plist := []string{
 			"com.qtproject.plist",
 			"com.vwvision.Vision" + licenseYear + ".plist",
@@ -58,6 +61,7 @@ func macData(softwareSelect string, licenseYear string) workingData {
 		return workingData{
 			plist: plist,
 			directories: directories,
+			license: license,
 		}
 	}
 }

@@ -16,6 +16,7 @@ type workingData struct {
 	plist       []string
 	registry	[]string
 	directories []string
+	license		string
 }
 
 // Home Directory OS dependent
@@ -46,10 +47,8 @@ func getLicenses(softwareSelect string) {
 		// TODO: Follow same workflow as found above and reuse where I can.
 		licenses := getWindowsLicenses(softwareSelect)
 		license := chooseLicense(softwareSelect, licenses)
-		data := winData(softwareSelect, license)
-		for _, entry := range data.directories {
-			fmt.Println(entry)
-		}
+		config := winData(softwareSelect, license)
+		chooseAction(softwareSelect, config)
 		//winGetData(softwareSelect, license)
 	}
 
@@ -121,4 +120,19 @@ func chooseLicense(softwareName string, licenses []string) string {
 	}
 
 	return pickedLicense // return string with 4 digits representing the application license year.
+}
+
+func chooseAction(softwareName string, config workingData) {
+	items := []string{"Clean Application", "Replace License"}
+	choice, _, err := dlgs.List("Chose your action", "What would you like to do?", items)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(choice + " " + softwareName)
+
+	//switch choice {
+	//case "Replace License":
+	//	fmt.
+	//}
+	//}
 }

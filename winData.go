@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -9,15 +8,16 @@ import (
 )
 
 func winData(softwareSelect string, licenseYear string) workingData {
+	// define system variables
 	winAppData := os.Getenv("APPDATA") + "\\"
 	winLocalAppData := os.Getenv("LOCALAPPDATA") + "\\"
-
 	appVersion := doTheMath(licenseYear)
-	fmt.Println(appVersion)
 
 	if softwareSelect == "Vectorworks" { // Run if Vectorworks was picked
+		license := "SOFTWARE\\Nemetschek\\Vectorworks \\" + appVersion + "\\Registration"
 		registry := []string{
 			"SOFTWARE\\Nemetschek\\Vectorworks " + appVersion,
+			"SOFTWARE\\VectorWorks",
 		}
 		directories := []string{
 			winAppData + softwareSelect + "\\" + licenseYear,
@@ -40,6 +40,7 @@ func winData(softwareSelect string, licenseYear string) workingData {
 		return workingData{
 			registry: registry,
 			directories: directories,
+			license: license,
 		}
 
 	} else { // Run if Vision was picked
@@ -56,6 +57,7 @@ func winData(softwareSelect string, licenseYear string) workingData {
 	}
 }
 
+// convert Software License year to version number.
 func doTheMath(appYear string) string {
 	values := strings.Split(appYear, "")[2:4]
 	appVersion := values[0] + values[1]
