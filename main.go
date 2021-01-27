@@ -12,8 +12,8 @@ import (
 )
 
 type workingData struct {
-	Plist 		[]string
-	Directories	[]string
+	plist 		[]string
+	directories	[]string
 }
 
 var homeDir, _ = os.UserHomeDir()
@@ -34,9 +34,10 @@ func getLicenses(softwareSelect string){
 	if runtime.GOOS == "darwin" {
 		licenses := getMacLicenses(softwareSelect)
 		license := chooseLicense(softwareSelect, licenses)
-		getData(softwareSelect, license)
+		data := getData(softwareSelect, license)
+		fmt.Println(data.plist[1])
 	} else {
-		fmt.Println("Running On Windows.")
+		// Start working to clean install from Windows
 	}
 	//runSoftware(softwareSelect)
 }
@@ -52,17 +53,29 @@ func getMacLicenses(softwareSelect string) []string {
 	}
 
 
-	for _, f := range files {
-		file := strings.Contains(f.Name(), "vectorworks.license.")
-		if file {
-			appYear := re.FindAllString(f.Name(), -1)
-			licenses = append(licenses, appYear[0])
+	if softwareSelect == "Vectorworks" {
+		for _, f := range files {
+			file := strings.Contains(f.Name(), "vectorworks.license.")
+			if file {
+				appYear := re.FindAllString(f.Name(), -1)
+				licenses = append(licenses, appYear[0])
+			}
 		}
+		return licenses
+	} else {
+		for _, f := range files {
+			file := strings.Contains(f.Name(), "vision.license.")
+			if file {
+				appYear := re.FindAllString(f.Name(), -1)
+				licenses = append(licenses, appYear[0])
+			}
+		}
+		return licenses
 	}
-	return licenses
+
 }
 
-func getData(softwareSelect string, licenseYear string) []string {
+func getData(softwareSelect string, licenseYear string) *workingData {
 	if softwareSelect == "Vectorworks" {
 		plist := []string{
 			"net.nemetschek.vectorworks.license." + licenseYear + ".plist",
@@ -73,22 +86,14 @@ func getData(softwareSelect string, licenseYear string) []string {
 			"net.nemetschek.vectorworksinstaller.plist",
 			"net.vectorworks.vectorworks." + licenseYear + ".plist",
 		}
-		for _, file := range plist {
-			workingData.Plist = append(workingData.plist, file)
-		}
-			dataDirectories := []string{
+		directories := []string{
 			homeDir + "/Library/Application\\ Support/Vectorworks\\ RMCache/rm" + licenseYear,
 			homeDir + "/Library/Application\\ Support/Vectorworks\\ Cloud\\ Services",
 			homeDir + "/Library/Application\\ Support/Vectorworks/" + licenseYear,
 			homeDir + "/Library/Application\\ Support/vectorworks-installer-wrapper",
 		}
-		for _, name := range plist {
-			fmt.Println(name)
-		}
-		for _, name := range dataDirectories {
-			fmt.Println(name)
-		}
-		return plist
+
+		return genDataStruct(plist, directories)
 	} else {
 		plist := []string{
 			"com.qtproject.plist",
@@ -97,7 +102,7 @@ func getData(softwareSelect string, licenseYear string) []string {
 			"net.vectorworks.Vision.plist",
 			"net.vectorworks.vision.license." + licenseYear + ".plist",
 		}
-		dataDirectories := []string{
+		directories := []string{
 			homeDir + "/Library/Application\\ Support/Vision/" + licenseYear,
 			homeDir + "/Library/Application\\ Support/VisionUpdater",
 			"/Library/Frameworks/QtConcurrent.framework",
@@ -120,12 +125,20 @@ func getData(softwareSelect string, licenseYear string) []string {
 			"/Library/Frameworks/rpath_manipulator.sh",
 			"/Library/Frameworks/setup_qt_frameworks.sh",
 		}
-		return plist
+		return genDataStruct(plist, directories)
 	}
 }
 
-func (data *workingData) constructData(testing []string) []workingData {
-	for 
+func genDataStruct(plist []string, directories []string) *workingData {
+	var dataStruct = new(workingData)
+
+	for _, file := range plist {
+		dataStruct.plist = append(dataStruct.plist, file)
+	}
+	for _, file := range directories {
+		dataStruct.directories = append(dataStruct.directories, file)
+	}
+	return dataStruct
 }
 
 func chooseLicense(softwareName string, licenses []string) string {
