@@ -3,11 +3,14 @@ package main
 import (
 	"fmt"
 	"github.com/gen2brain/dlgs"
+	"golang.org/x/sys/windows/registry"
 	"io/ioutil"
 	"log"
 	"os"
+	"os/user"
 	"regexp"
 	"runtime"
+	"strconv"
 	"strings"
 )
 
@@ -132,5 +135,19 @@ func chooseAction(softwareName string, config workingData) {
 	switch choice {
 	case "Replace License":
 		fmt.Println(config.license)
+		currentUser, err := user.Current()
+		if err != nil {
+			log.Fatal(err)
+		}
+		userUIDStr := currentUser.Uid[4:4]
+		uid, err := strconv.Atoi(userUIDStr)
+		if err != nil {
+			log.Fatal(err)
+		}
+		key, err := registry.OpenKey(registry.CURRENT_USER, config.license, uint32(uid))
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(key)
 	}
 }
