@@ -13,8 +13,9 @@ import (
 
 // Data
 type workingData struct {
-	plist 		[]string
-	directories	[]string
+	plist       []string
+	registry	[]string
+	directories []string
 }
 
 // Home Directory OS dependent
@@ -22,131 +23,102 @@ var homeDir, _ = os.UserHomeDir()
 
 func main() {
 	// Start by picking between "Vectorworks" and "Vision"
-	softwareSelect, closeDiag, err := dlgs.List("Vectorworks, Inc. - App Cleaner", "What software package are you attempting to edit?", []string{"Vectorworks","Vision"})
+	softwareSelect, closeDiag, err := dlgs.List("Vectorworks, Inc. - App Cleaner", "What software package are you attempting to edit?", []string{"Vectorworks", "Vision"})
 	if err != nil {
 		panic(err)
 	}
-	if !closeDiag{
+
+	if !closeDiag {
 		fmt.Println("Closed by user...")
 	}
+
 	getLicenses(softwareSelect)
 }
 
-func getLicenses(softwareSelect string){
+func getLicenses(softwareSelect string) {
 	if runtime.GOOS == "darwin" {
-		licenses := getMacLicenses(softwareSelect) // Finds and returns all licenses found for selected software
+		licenses := getMacLicenses(softwareSelect)         // Finds and returns all licenses found for selected software
 		license := chooseLicense(softwareSelect, licenses) // Returns a single license version
-		data := getData(softwareSelect, license) // generate proper data for select license version
+		data := macData(softwareSelect, license)           // generate proper data for select license version
 		fmt.Println(data.plist[1])
 	} else {
 		//licenses := getWindowsLicenses(softwareSelect)
 		// TODO: Follow same workflow as found above and reuse where I can.
+		licenses := getWindowsLicenses(softwareSelect)
+		license := chooseLicense(softwareSelect, licenses)
+		data := winData(softwareSelect, license)
+		for _, entry := range data.directories {
+			fmt.Println(entry)
+		}
+		//winGetData(softwareSelect, license)
 	}
-	// Should I do something here? ... Perhaps handle above differently so it reaches this point.
-}
 
+	// TODO: Should I do something here? ... Perhaps handle above differently so it reaches this point.
+}
 
 func getMacLicenses(softwareSelect string) []string {
 	var licenses []string
+
 	re := regexp.MustCompile("[0-9]+") // Find all digits for plist file names
-	files, err := ioutil.ReadDir(homeDir + "/Library/Preferences")
+
+	files, err := ioutil.ReadDir(homeDir + "/Library/Preferences") // gets list of all plist file names
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	// returns all license year numbers found in plist file names from the files variable
+	for _, f := range files {
+		file := strings.Contains(f.Name(), softwareSelect+".license.")
 
-	if softwareSelect == "Vectorworks" {
-		for _, f := range files {
-			file := strings.Contains(f.Name(), "vectorworks.license.")
-			if file {
-				appYear := re.FindAllString(f.Name(), -1)
-				licenses = append(licenses, appYear[0])
-			}
+		if file {
+			appYear := re.FindAllString(f.Name(), -1)
+			licenses = append(licenses, appYear[0])
 		}
-		return licenses
-	} else {
-		for _, f := range files {
-			file := strings.Contains(f.Name(), "vision.license.")
-			if file {
-				appYear := re.FindAllString(f.Name(), -1)
-				licenses = append(licenses, appYear[0])
-			}
-		}
-		return licenses
 	}
 
+	return licenses
 }
 
-func getData(softwareSelect string, licenseYear string) *workingData {
-	if softwareSelect == "Vectorworks" {
-		plist := []string{
-			"net.nemetschek.vectorworks.license." + licenseYear + ".plist",
-			"net.nemetschek.vectorworks." + licenseYear + ".plist",
-			"net.nemetschek.vectorworks.spotlightimporter.plist",
-			"net.nemetschek.vectorworks.plist",
-			"net.nemetschek.vectorworksinstaller.helper.plist",
-			"net.nemetschek.vectorworksinstaller.plist",
-			"net.vectorworks.vectorworks." + licenseYear + ".plist",
-		}
-		directories := []string{
-			homeDir + "/Library/Application\\ Support/Vectorworks\\ RMCache/rm" + licenseYear,
-			homeDir + "/Library/Application\\ Support/Vectorworks\\ Cloud\\ Services",
-			homeDir + "/Library/Application\\ Support/Vectorworks/" + licenseYear,
-			homeDir + "/Library/Application\\ Support/vectorworks-installer-wrapper",
-		}
+func getWindowsLicenses(softwareSelect string) []string {
+	var licenses []string
 
-		return genDataStruct(plist, directories)
-	} else {
-		plist := []string{
-			"com.qtproject.plist",
-			"com.vwvision.Vision" + licenseYear + ".plist",
-			"com.yourcompany.Vision.plist",
-			"net.vectorworks.Vision.plist",
-			"net.vectorworks.vision.license." + licenseYear + ".plist",
-		}
-		directories := []string{
-			homeDir + "/Library/Application\\ Support/Vision/" + licenseYear,
-			homeDir + "/Library/Application\\ Support/VisionUpdater",
-			"/Library/Frameworks/QtConcurrent.framework",
-			"/Library/Frameworks/QtCore.framework",
-			"/Library/Frameworks/QtDBus.framework",
-			"/Library/Frameworks/QtGui.framework",
-			"/Library/Frameworks/QtNetwork.framework",
-			"/Library/Frameworks/QtOpenGL.framework",
-			"/Library/Frameworks/QtPlugins",
-			"/Library/Frameworks/QtPositioning.framework",
-			"/Library/Frameworks/QtPrintSupport.framework",
-			"/Library/Frameworks/QtQml.framework",
-			"/Library/Frameworks/QtQuick.framework",
-			"/Library/Frameworks/QtWebChannel.framework",
-			"/Library/Frameworks/QtWebEngine.framework",
-			"/Library/Frameworks/QtWebEngineCore.framework",
-			"/Library/Frameworks/QtWebEngineWidgets.framework",
-			"/Library/Frameworks/QtWidgets.framework",
-			"/Library/Frameworks/QtXml.framework",
-			"/Library/Frameworks/rpath_manipulator.sh",
-			"/Library/Frameworks/setup_qt_frameworks.sh",
-		}
-		return genDataStruct(plist, directories)
+	re := regexp.MustCompile("[0-9]+")
+
+	folders, err := ioutil.ReadDir(os.Getenv("APPDATA") + "/" + softwareSelect)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, f := range folders {
+		appYear := re.FindString(f.Name())
+		licenses = append(licenses, appYear)
+	}
+	return licenses
+}
+
+func winGetData(softwareName string) workingData {
+	registry := []string{
+		"testing",
+		"more Testing",
+	}
+
+	directories := []string{
+		"testing/dir",
+		"more testing/dir",
+	}
+
+	return workingData{
+		registry: registry,
+		directories: directories,
 	}
 }
 
-func genDataStruct(plist []string, directories []string) *workingData {
-	var dataStruct = new(workingData)
-
-	for _, file := range plist {
-		dataStruct.plist = append(dataStruct.plist, file)
-	}
-	for _, file := range directories {
-		dataStruct.directories = append(dataStruct.directories, file)
-	}
-	return dataStruct
-}
-
+// Allow user to choose which licence to start working with.
 func chooseLicense(softwareName string, licenses []string) string {
-	pickedLicense, _, err := dlgs.List("Chose your license", "Please pick from the list of found " + softwareName + " licenses.", licenses)
+	pickedLicense, _, err := dlgs.List("Choose your license", "Please pick from the list of found "+softwareName+" licenses.", licenses)
 	if err != nil {
 		log.Fatal(err)
 	}
-	return pickedLicense
+
+	return pickedLicense // return string with 4 digits representing the application license year.
 }
