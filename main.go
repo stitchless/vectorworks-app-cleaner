@@ -128,11 +128,9 @@ func chooseAction(softwareName string, config workingData) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(choice + " " + softwareName)
 
-	//switch choice {
-	//case "Replace License":
-	//	fmt.
-	//}
-	//}
+	switch choice {
+	case "Replace License":
+		fmt.Println(config.license)
+	}
 }

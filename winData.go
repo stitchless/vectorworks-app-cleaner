@@ -14,7 +14,7 @@ func winData(softwareSelect string, licenseYear string) workingData {
 	appVersion := doTheMath(licenseYear)
 
 	if softwareSelect == "Vectorworks" { // Run if Vectorworks was picked
-		license := "SOFTWARE\\Nemetschek\\Vectorworks \\" + appVersion + "\\Registration"
+		license := "SOFTWARE\\Nemetschek\\Vectorworks " + appVersion + "\\Registration"
 		registry := []string{
 			"SOFTWARE\\Nemetschek\\Vectorworks " + appVersion,
 			"SOFTWARE\\VectorWorks",
