@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gen2brain/dlgs"
 	"log"
 	"os"
@@ -12,7 +13,7 @@ type softwareConfig struct {
 	registry    []string
 	directories []string
 	license     string
-	vcs			[]string
+	vcs         []string
 }
 
 // Home Directory OS dependent
@@ -54,16 +55,17 @@ func chooseAction(config softwareConfig) {
 	// Replace old license with new one
 	case "Replace License":
 		serial := getSerial(config)
+		fmt.Println(serial)
 		newSerial := inputNewSerial(serial)
 		replaceOldSerial(newSerial, config)
 	// Remove all VCS directories
 	// TODO: Move this to first step.
 	case "Clean VCS":
-		cleanVCS(config)
+		//cleanVCS(config)
 	// Removes all properties and files/folders for the given software/version
 	case "Clean Application":
-		cleanApplication(config)
+		//cleanApplication(config)
 	}
 
-	_, _ = dlgs.Info("Finished!", choice + " is finished running")
+	_, _ = dlgs.Info("Finished!", choice+" is finished running")
 }

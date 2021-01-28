@@ -33,7 +33,7 @@ func getSerial(config softwareConfig) string {
 	}
 
 	defer func() {
-		err := key.Close()
+		err = key.Close()
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -69,7 +69,7 @@ func replaceOldSerial(newSerial string, config softwareConfig) {
 	}
 
 	defer func() {
-		err := key.Close()
+		err = key.Close()
 		if err != nil {
 			log.Fatal(err)
 		}

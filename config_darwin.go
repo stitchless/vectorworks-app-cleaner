@@ -1,8 +1,9 @@
 package main
 
-func constructData(softwareName string, licenseYear string) softwareConfig {
+func generateConfig(softwareName string, licenseYear string) softwareConfig {
 	if softwareName == "Vectorworks" { // Run if Vectorworks was picked
-		license := "net.nemetschek.vectorworks.license." + licenseYear + ".plist"
+		license := homeDir + "/Library/Preferences/net.nemetschek.vectorworks.license." + licenseYear + ".plist"
+
 		plist := []string{
 			"net.nemetschek.vectorworks.license." + licenseYear + ".plist",
 			"net.nemetschek.vectorworks." + licenseYear + ".plist",
