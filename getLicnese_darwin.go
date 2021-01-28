@@ -98,14 +98,21 @@ func replaceOldSerial(newSerial string, config softwareConfig) {
 }
 
 func refreshPList() {
-	cmd := exec.Command("echo", "-u $USER cfprefsd")
-	if err := cmd.Start(); err != nil {
+	fmt.Println("Refreshing plist files...")
+	// osascript -e 'do shell script "sudo killall -u $USER cfprefsd" with administrator privileges'
+	cmd := exec.Command(`osascript`, "-s", "h", "-e",`do shell script "sudo killall -u $USER cfprefsd" with administrator privileges`)
+	stderr, err := cmd.StderrPipe()
+	log.SetOutput(os.Stderr)
+	check(err)
+
+	if err = cmd.Start(); err != nil {
 		log.Fatal(err)
 	}
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
 
-	//if err := cmd.Process.Kill(); err != nil {
-	//	log.Fatal("failed to kill process: ", err)
-	//}
+	cmdErrOutput, _ := ioutil.ReadAll(stderr)
+	fmt.Printf("%s\n", cmdErrOutput)
+
+	if err = cmd.Wait(); err != nil {
+		log.Fatal(err)
+	}
 }
