@@ -14,12 +14,6 @@ import (
 	"strings"
 )
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
 type LicenseOpts struct {
 	license map[string]string `plist:"NNA User License"`
 }
@@ -100,7 +94,7 @@ func replaceOldSerial(newSerial string, config softwareConfig) {
 func refreshPList() {
 	fmt.Println("Refreshing plist files...")
 	// osascript -e 'do shell script "sudo killall -u $USER cfprefsd" with administrator privileges'
-	cmd := exec.Command(`osascript`, "-s", "h", "-e",`do shell script "sudo killall -u $USER cfprefsd" with administrator privileges`)
+	cmd := exec.Command(`osascript`, "-s", "h", "-e", `do shell script "sudo killall -u $USER cfprefsd" with administrator privileges`)
 	stderr, err := cmd.StderrPipe()
 	log.SetOutput(os.Stderr)
 	check(err)

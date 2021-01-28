@@ -1,11 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gen2brain/dlgs"
 	"log"
 	"os"
 )
+
+// TODO: Refactor to use WebUI as opposed to a series of dialogs.
 
 // Data
 type softwareConfig struct {
@@ -14,10 +15,17 @@ type softwareConfig struct {
 	directories []string
 	license     string
 	vcs         []string
+	vision      []string
 }
 
 // Home Directory OS dependent
 var homeDir, _ = os.UserHomeDir()
+
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
 
 func main() {
 	// Start by picking between "Vectorworks" and "Vision"
@@ -55,16 +63,15 @@ func chooseAction(config softwareConfig) {
 	// Replace old license with new one
 	case "Replace License":
 		serial := getSerial(config)
-		fmt.Println(serial)
 		newSerial := inputNewSerial(serial)
 		replaceOldSerial(newSerial, config)
 	// Remove all VCS directories
 	// TODO: Move this to first step.
 	case "Clean VCS":
-		//cleanVCS(config)
+		cleanVCS(config)
 	// Removes all properties and files/folders for the given software/version
 	case "Clean Application":
-		//cleanApplication(config)
+		cleanApplication(config)
 	}
 
 	_, _ = dlgs.Info("Finished!", choice+" is finished running")

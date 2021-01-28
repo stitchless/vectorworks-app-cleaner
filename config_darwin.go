@@ -20,10 +20,20 @@ func generateConfig(softwareName string, licenseYear string) softwareConfig {
 			homeDir + "/Library/Application\\ Support/vectorworks-installer-wrapper",
 		}
 
+		vision := []string{
+			"",
+		}
+
+		vcs := []string{
+			"",
+		}
+
 		return softwareConfig{
 			plist:       plist,
 			directories: directories,
 			license:     license,
+			vcs:         vcs,
+			vision:      vision,
 		}
 
 	} else { // Run if Vision was picked
