@@ -1,21 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"golang.org/x/sys/windows/registry"
-	"log"
+	"os"
 )
 
 func cleanApplication(config softwareConfig) {
 	// Deletes relevant registry entries for select software/version
 	for _, property := range config.registry {
-		k, err := registry.OpenKey(registry.CURRENT_USER, property, registry.ALL_ACCESS)
-		if err != nil {
-			log.Fatal(err)
-		}
+		k, _ := registry.OpenKey(registry.CURRENT_USER, property, registry.ALL_ACCESS)
+
 		defer k.Close()
 
-		names, _ := k.ReadSubKeyNames(50)
+		names, _ := k.ReadSubKeyNames(-1)
 
 		for _, name := range names {
 			_ = registry.DeleteKey(k, name)
@@ -25,7 +22,8 @@ func cleanApplication(config softwareConfig) {
 	// TODO: Check for directory after as a way to verify deletion.
 
 	for _, directory := range config.directories {
-		fmt.Println(directory)
+		_ = os.RemoveAll(directory)
+		// TODO: Implement error checking.
 	}
 }
 

@@ -14,7 +14,7 @@ func FindAndChooseLicense(softwareName string) string {
 
 	re := regexp.MustCompile("[0-9]+")
 
-	folders, err := ioutil.ReadDir(os.Getenv("APPDATA") + "/" + softwareName)
+	folders, err := ioutil.ReadDir(os.Getenv("APPDATA") + "/Nemetschek/" + softwareName)
 	if err != nil {
 		log.Fatal(err)
 	}
