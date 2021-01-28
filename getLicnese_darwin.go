@@ -1,11 +1,15 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
+	"fmt"
 	"github.com/gen2brain/dlgs"
 	"howett.net/plist"
 	"io/ioutil"
 	"log"
+	"os"
+	"os/exec"
 	"regexp"
 	"strings"
 )
@@ -16,7 +20,7 @@ func check(e error) {
 	}
 }
 
-type softwareOpts struct {
+type LicenseOpts struct {
 	license map[string]string `plist:"NNA User License"`
 }
 
@@ -47,7 +51,7 @@ func getSerial(config softwareConfig) string {
 	buffer := bytes.NewReader(plistFile)
 	check(err)
 
-	var plistData softwareOpts
+	var plistData LicenseOpts
 	decoder := plist.NewDecoder(buffer)
 	err = decoder.Decode(&plistData.license)
 	check(err)
@@ -64,14 +68,44 @@ func inputNewSerial(serial string) string {
 }
 
 func replaceOldSerial(newSerial string, config softwareConfig) {
-	//
-	//plistData := &softwareOpts{
-	//	//license: `NNA User License`: newSerial,
+	plistFile, err := os.Open(config.license)
+	check(err)
+	err = plistFile.Truncate(0)
+
+	plistData := &LicenseOpts{
+		license: map[string]string{"NNA User License": newSerial},
+	}
+
+	fmt.Println(plistData.license)
+	buffer := &bytes.Buffer{}
+	encoder := plist.NewEncoder(buffer)
+
+	err = encoder.Encode(plistData.license)
+	check(err)
+
+	err = ioutil.WriteFile(config.license, buffer.Bytes(), 0644)
+	check(err)
+
+	w := bufio.NewWriter(buffer)
+	n4, err := w.WriteString("buffered\n")
+	check(err)
+	fmt.Printf("wrote %d bytes\n", n4)
+
+	err = w.Flush()
+	check(err)
+
+	refreshPList()
+}
+
+func refreshPList() {
+	cmd := exec.Command("echo", "-u $USER cfprefsd")
+	if err := cmd.Start(); err != nil {
+		log.Fatal(err)
+	}
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	//if err := cmd.Process.Kill(); err != nil {
+	//	log.Fatal("failed to kill process: ", err)
 	//}
-	//
-	//buffer := &bytes.Buffer{}
-	//encoder := plist.NewEncoder(buffer)
-	//err := encoder.Encode(plistData)
-	//check(err)
-	//fmt.Println(buffer.String())
 }
