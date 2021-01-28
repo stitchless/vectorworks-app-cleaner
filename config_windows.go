@@ -30,17 +30,20 @@ func generateConfig(softwareName string, licenseYear string) softwareConfig {
 			winAppData + "vectorworks-installer",
 			winAppData + "vectorworks-updater",
 			winAppData + "vectorworks-updater-updater",
+			winLocalAppData + "vectorworks-updater-updater",
+			winLocalAppData + "Nemetschek",
+		}
+		vcs := []string{
 			winAppData + "vectorworks-cloud-services-beta",
 			winAppData + "vectorworks-cloud-services",
-			winLocalAppData + "vectorworks-updater-updater",
 			winLocalAppData + "vectorworks-cloud-services-beta-updater",
-			winLocalAppData + "Nemetschek",
 		}
 
 		return softwareConfig{
 			registry:    registry,
 			directories: directories,
 			license:     license,
+			vcs:         vcs,
 		}
 
 	} else { // Run if Vision was picked

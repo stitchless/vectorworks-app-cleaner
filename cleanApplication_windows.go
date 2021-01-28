@@ -27,3 +27,9 @@ func cleanApplication(config softwareConfig) {
 	}
 }
 
+func cleanVCS(config softwareConfig) {
+	for _, directory := range config.vcs {
+		_ = os.RemoveAll(directory)
+	}
+}
+

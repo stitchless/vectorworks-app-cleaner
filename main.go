@@ -12,6 +12,7 @@ type softwareConfig struct {
 	registry    []string
 	directories []string
 	license     string
+	vcs			[]string
 }
 
 // Home Directory OS dependent
@@ -43,7 +44,7 @@ func chooseLicense(softwareName string, licenses []string) string {
 }
 
 func chooseAction(config softwareConfig) {
-	items := []string{"Clean Application", "Replace License"}
+	items := []string{"Clean Application", "Clean VCS", "Replace License"}
 	choice, _, err := dlgs.List("Chose your action", "What would you like to do?", items)
 	if err != nil {
 		log.Fatal(err)
@@ -55,8 +56,14 @@ func chooseAction(config softwareConfig) {
 		serial := getSerial(config)
 		newSerial := inputNewSerial(serial)
 		replaceOldSerial(newSerial, config)
+	// Remove all VCS directories
+	// TODO: Move this to first step.
+	case "Clean VCS":
+		cleanVCS(config)
 	// Removes all properties and files/folders for the given software/version
 	case "Clean Application":
 		cleanApplication(config)
 	}
+
+	_, _ = dlgs.Info("Finished!", choice + " is finished running")
 }
