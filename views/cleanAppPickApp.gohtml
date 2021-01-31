@@ -1,0 +1,21 @@
+{{ define "cleanAppPickApp" }}
+    {{template "header"}}
+    <section>
+        <div class="row text-center col-5">
+            <h4>{{.Title}}</h4>
+        </div>
+        <div class="row">
+            <div class="card-deck">
+                {{ range .Card }}
+                    <div class="col-sm-10 offset-1 d-flex align-items-stretch">
+                        {{ template "basicCard" .}}
+                    </div>
+                {{ end }}
+            </div>
+            {{.Description}}
+        </div>
+        <p class="text-muted">
+            <span>{{template "footer" .}}</span>
+        </p>
+    </section>
+{{ end }}

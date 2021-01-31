@@ -7,9 +7,9 @@
         <div class="card-deck">
             {{ range $index, $_ :=.Card }}
         {{ if eq $index 0}}
-            <div class="col-sm-5 offset-1 d-flex align-items-stretch">
+            <div class="col-6 offset-1 d-flex align-items-stretch">
                 {{else}}
-                <div class="col-sm-5 d-flex align-items-stretch">
+                <div class="col-6 d-flex align-items-stretch">
                     {{end}}
                     {{ template "basicCard" .}}
                 </div>
@@ -17,6 +17,8 @@
             </div>
             {{.Description}}
         </div>
-        {{template "footer" .}}
+        <p class="clearfix">
+        <span class="text-muted">{{template "footer" .}}</span>
+        </p>
     </div>
 {{ end }}

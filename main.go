@@ -14,6 +14,24 @@ var homeDir, _ = os.UserHomeDir()
 var dir string
 var tmpl *template.Template
 
+type htmlValues struct {
+	Title       string
+	Description string
+	Software    []Software
+	Footer      string
+}
+
+type Software struct {
+	Name     string
+	Versions []Version
+}
+
+type Version struct {
+	Year   string
+	Serial string
+	Config softwareConfig
+}
+
 // software Information
 type softwareConfig struct {
 	plist       []string
@@ -22,29 +40,6 @@ type softwareConfig struct {
 	license     string
 	vcs         []string
 	vision      []string
-}
-
-type htmlValues struct {
-	Title       string
-	Description string
-	Label       []string
-	Card        []card
-	Footer      string
-}
-
-type card struct {
-	Title       string
-	Description string
-	Header      string
-	Button      string
-	Action      string
-	Options     []button
-}
-
-// used if multiple buttons appear on a card
-type button struct {
-	Label  string
-	Action string
 }
 
 // Set up and run the webview.
@@ -56,15 +51,23 @@ func main() {
 		log.Fatal(err)
 	}
 
-	tmpl = template.Must(template.ParseGlob(dir + "/templates/*.gohtml"))
-	template.Must(tmpl.ParseGlob(dir + "/views/*.gohtml"))
+	// Needed
+	funcMap := template.FuncMap{
+		// Increments int by 1 (Used to illustrate table views)
+		"inc": func(i int) int {
+			return i + 1
+		},
+	}
+
+	tmpl = template.Must(template.ParseGlob(dir + "/templates/*.gohtml")).Funcs(funcMap)
+	template.Must(tmpl.ParseGlob(dir + "/views/*.gohtml")).Funcs(funcMap)
 
 	go webApp()
 
 	// Set up Webview
 	w := webview.New(true)
 	defer w.Destroy()
-	w.SetTitle("Vectorworks, Inc.")
+	w.SetTitle("Vectorworks, Inc. - Application Utility Tool")
 	w.SetSize(800, 600, webview.HintFixed)
 	w.Navigate("http://127.0.0.1:12346")
 	w.Run()
@@ -85,7 +88,7 @@ func webApp() {
 	//mux.HandleFunc("/chooseYear", chooseYearHandler)
 	//mux.HandleFunc("/chooseAction", chooseActionHandler)
 	//mux.HandleFunc("/replaceLicense", replaceLicenseHandler)
-	mux.HandleFunc("/cleanApp", cleanAppHandler)
+	//mux.HandleFunc("/cleanApp", cleanAppHandler)
 	//mux.HandleFunc("/cancel", cancelHandler)
 
 	// Configure the webserver
@@ -98,49 +101,29 @@ func webApp() {
 	check(err)
 }
 
+// TODO: Get VW Versions, Get Vision Version, Determine if VCS is installed
+
 func homePageHandler(w http.ResponseWriter, r *http.Request) {
+	vectorworksVersions := fetchAppYears("Vectorworks")
+	visVersions := fetchAppYears("Vision")
+
 	homeScreen := htmlValues{
-		Title:  "Pleas Select what you would like to do.",
-		Footer: "This application will work for Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.",
-		Label:  []string{"Clean Application", "Change Serial"},
-		Card: []card{
-			{Title: "Clean Application", Description: "Remove all plist/registry entries for a given version and all depended directories", Button: "Start", Action: "cleanApp"},
-			{Title: "Change Serial", Description: "This will change the serial of the given software version and if needed, refresh the OS to reload cache so no restart is needed.", Button: "Start", Action: "changeSerial"},
+		Title:       "Welcome to the Vectorworks Utility Tool",
+		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
+		Software: []Software{
+			{Name: "Vectorworks", Versions: vectorworksVersions},
+			{Name: "Vision", Versions: visVersions},
 		},
+		Footer: "This application will work for Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.",
 	}
 
 	err := tmpl.ExecuteTemplate(w, "homePageAlt", homeScreen)
 	check(err)
 }
 
-func cleanAppHandler(w http.ResponseWriter, r *http.Request) {
-	homeScreen := htmlValues{
-		Title:       "SUCESS!",
-		Description: "This application will work for Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.",
-		Label:       []string{"Clean Application", "Change Serial"},
-		Card: []card{
-			{Title: "Clean Application", Button: "Start", Action: "cleanApp"},
-			{Title: "Change Serial", Button: "Start", Action: "changeSerial"},
-		},
-	}
-
-	err := tmpl.ExecuteTemplate(w, "homePage", homeScreen)
-	check(err)
-}
-
-//// Start by picking between "Vectorworks" and "Vision"
-//softwareName, cancelDiag, err := dlgs.List("Vectorworks, Inc. - App Cleaner", "What software package are you attempting to edit?", []string{"Vectorworks", "Vision"})
-//if err != nil {
-//	log.Fatalf("cannot use the dialog as expected: %e", err)
-//}
-//
-//if !cancelDiag {
-//	log.Print("Closed by user...")
-//}
-//
-//license := FindAndChooseLicense(softwareName)   // Find and Choose Versions of software based on license
-//config := generateConfig(softwareName, license) // generate proper data for select license version
-//chooseAction(config)
+// TODO: Separate views based on license type or localizations via Tabs
+// TODO: Shows all results on screen with actions next to each version
+// TODO: Show Actions as Modals?
 
 // Allow user to choose which licence to start working with.
 func chooseLicense(softwareName string, licenses []string) string {
@@ -161,9 +144,9 @@ func chooseAction(config softwareConfig) {
 	switch choice {
 	// Replace old license with new one
 	case "Replace License":
-		serial := getSerial(config)
-		newSerial := inputNewSerial(serial)
-		replaceOldSerial(newSerial, config)
+		//serial := getSerial(config)
+		//newSerial := inputNewSerial(serial)
+		//replaceOldSerial(newSerial, config)
 	// Remove all VCS directories
 	// TODO: Move this to first step.
 	case "Clean VCS":

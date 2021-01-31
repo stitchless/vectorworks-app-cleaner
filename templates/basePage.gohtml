@@ -1,113 +1,147 @@
-{{/* ####################
-START OF HEADER TEMPLATE!
-#################### */}}
+<!--
+
+=========================================================
+* Pixel Pro Bootstrap 5 UI Kit
+=========================================================
+
+* Product Page: https://themesberg.com/product/ui-kit/pixel-pro-premium-bootstrap-5-ui-kit
+* Copyright 2019 Themesberg (https://www.themesberg.com)
+
+* Coded by https://themesberg.com
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. Contact us if you want to remove it.
+
+-->
 {{define "header"}}
-    <!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
 
-    <html class="loading" lang="en">
-    <!-- BEGIN : Head-->
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <!-- Primary Meta Tags -->
+    <title>Pixel Pro - Blank page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="title" content="Pixel Pro - Blank page">
+    <meta name="author" content="Themesberg">
+    <meta name="description"
+          content="Premium Bootstrap 5 UI Kit featuring over 1000 components and 35 example pages created by Themesberg.">
+    <meta name="keywords"
+          content="bootstrap, bootstrap ui kit, premium Bootstrap 5 UI Kit, bootstrap dashboard, bootstrap messaging, bootstrap billing, bootstrap item list, bootstrap charts, bootstrap timelines, bootstrap cards, bootstrap pricing cards, bootstrap profile cards, bootstrap 5, gulp, npm, sass, javascript, jquery, themesberg, Bootstrap 5 UI Kit theme, Bootstrap 5 UI Kit, premium bootstrap ui kit, bootstrap design system, themesberg ui kit, pixel ui kit, pixel pro ui kit"/>
+    <link rel="canonical" href="https://themesberg.com/product/ui-kit/pixel-pro-premium-bootstrap-5-ui-kit">
 
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-        <meta name="description"
-              content="Apex admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
-        <meta name="keywords"
-              content="admin template, Apex admin template, dashboard template, flat admin template, responsive admin template, web app">
-        <meta name="author" content="PIXINVENT">
-        <title>Demo Page - Apex responsive bootstrap 4 admin template</title>
-        <link rel="shortcut icon" type="image/x-icon" href="../static/images/ico/favicon.ico">
-        <link rel="shortcut icon" type="image/png" href="../static/images/ico/favicon-32.png">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-touch-fullscreen" content="yes">
-        <meta name="apple-mobile-web-app-status-bar-style" content="default">
-        <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500,700,900|Montserrat:300,400,500,600,700,800,900"
-              rel="stylesheet">
-        <!-- BEGIN VENDOR CSS-->
-        <!-- font icons-->
-        <link rel="stylesheet" type="text/css" href="../static/fonts/feather/style.min.css">
-        <link rel="stylesheet" type="text/css" href="../static/fonts/simple-line-icons/style.css">
-        <link rel="stylesheet" type="text/css" href="../static/fonts/font-awesome/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="../static/vendors/css/perfect-scrollbar.min.css">
-        <link rel="stylesheet" type="text/css" href="../static/vendors/css/prism.min.css">
-        <link rel="stylesheet" type="text/css" href="../static/vendors/css/switchery.min.css">
-        <!-- END VENDOR CSS-->
-        <!-- BEGIN APEX CSS-->
-        <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.css">
-        <link rel="stylesheet" type="text/css" href="../static/css/bootstrap-extended.css">
-        <link rel="stylesheet" type="text/css" href="../static/css/colors.css">
-        <link rel="stylesheet" type="text/css" href="../static/css/components.css">
-        <link rel="stylesheet" type="text/css" href="../static/css/themes/layout-dark.css">
-        <link rel="stylesheet" href="../static/css/plugins/switchery.css">
-        <!-- END APEX CSS-->
-        <!-- BEGIN Page Level CSS-->
-        {{/*    <link rel="stylesheet" type="text/css" href="../../../app-assets/css/core/menu/horizontal-menu.css">*/}}
-        <!-- END Page Level CSS-->
-        <!-- BEGIN: Custom CSS-->
-        <link rel="stylesheet" type="text/css" href="../static/css/style.css">
-        <!-- END: Custom CSS-->
-    </head>
-    <!-- END : Head-->
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://demo.themesberg.com/pixel-pro">
+    <meta property="og:title" content="Pixel Pro - Blank page">
+    <meta property="og:description"
+          content="Premium Bootstrap 5 UI Kit featuring over 1000 components and 35 example pages created by Themesberg.">
+    <meta property="og:image"
+          content="https://themesberg.s3.us-east-2.amazonaws.com/public/products/pixel-pro/pixel-pro-preview.jpg">
 
-    <!-- BEGIN : Body-->
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://demo.themesberg.com/pixel-pro">
+    <meta property="twitter:title" content="Pixel Pro - Blank page">
+    <meta property="twitter:description"
+          content="Premium Bootstrap 5 UI Kit featuring over 1000 components and 35 example pages created by Themesberg.">
+    <meta property="twitter:image"
+          content="https://themesberg.s3.us-east-2.amazonaws.com/public/products/pixel-pro/pixel-pro-preview.jpg">
 
-    <body class="horizontal-layout" data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
-    <!-- ////////////////////////////////////////////////////////////////////////////-->
-    <div class="wrapper">
-    <div class="main-panel">
-    <!-- BEGIN : Main Content-->
-    <div class="main-content">
-    <div class="content-overlay"></div>
-    <div class="content-wrapper">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="120x120" href="../static/assets/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../static/assets/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../static/assets/img/favicon/favicon-16x16.png">
+    <link rel="manifest" href="../static/assets/img/favicon/site.webmanifest">
+    <link rel="mask-icon" href="../static/assets/img/favicon/safari-pinned-tab.svg" color="#ffffff">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Fontawesome -->
+    <link type="text/css" href="../static/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+
+    <!-- Glide JS -->
+    <link rel="stylesheet" href="../static/vendor/@glidejs/glide/dist/css/glide.core.min.css">
+    <link rel="stylesheet" href="../static/vendor/@glidejs/glide/dist/css/glide.theme.min.css">
+
+    <!-- Pixel CSS -->
+    <link type="text/css" href="../static/css/pixel.css" rel="stylesheet">
+
+    <!-- NOTICE: You can use the _analytics.html partial to include production code specific code & trackers -->
+
+</head>
+
+<body>
+<main>
+
+{{/*    <div class="preloader bg-dark flex-column justify-content-center align-items-center">*/}}
+{{/*        <svg id="loader-logo" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 64 78.4">*/}}
+{{/*            <path fill="#fff" d="M10,0h1.2V11.2H0V10A10,10,0,0,1,10,0Z"/>*/}}
+{{/*            <rect fill="none" stroke="#fff" stroke-width="11.2" x="40" y="17.6" width="0" height="25.6"/>*/}}
+{{/*            <rect fill="none" stroke="#fff" stroke-opacity="0.4" stroke-width="11.2" x="23" y="35.2" width="0"*/}}
+{{/*                  height="25.6"/>*/}}
+{{/*            <path fill="#fff" d="M52.8,35.2H64V53.8a7,7,0,0,1-7,7H52.8V35.2Z"/>*/}}
+{{/*            <rect fill="none" stroke="#fff" stroke-width="11.2" x="6" y="52.8" width="0" height="25.6"/>*/}}
+{{/*            <path fill="#fff" d="M52.8,0H57a7,7,0,0,1,7,7h0v4.2H52.8V0Z"/>*/}}
+{{/*            <rect fill="none" stroke="#fff" stroke-opacity="0.4" stroke-width="11.2" x="57.8" y="17.6" width="0"*/}}
+{{/*                  height="11.2"/>*/}}
+{{/*            <rect fill="none" stroke="#fff" stroke-width="11.2" x="6" y="35.2" width="0" height="11.2"/>*/}}
+{{/*            <rect fill="none" stroke="#fff" stroke-width="11.2" x="40.2" y="49.6" width="0" height="11.2"/>*/}}
+{{/*            <path fill="#fff" d="M17.6,67.2H28.8v1.2a10,10,0,0,1-10,10H17.6V67.2Z"/>*/}}
+{{/*            <rect fill="none" stroke="#fff" stroke-opacity="0.4" stroke-width="28.8" x="31.6" width="0" height="11.2"/>*/}}
+{{/*            <rect fill="none" stroke="#fff" x="14" stroke-width="28.8" y="17.6" width="0" height="11.2"/>*/}}
+{{/*        </svg>*/}}
+{{/*    </div>*/}}
+
+    <!-- Hero -->
+    <section class="section-header" style="padding-top: 1rem; padding-bottom: 1rem">
+        <div class="container">
+            {{end}}
+
+
+
+
+
+
+            {{define "footer"}}
+        </div>
+    </section>
+</main>
+<footer class="clearfix footer py-2 bg-dark text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                Testing
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Core -->
+<script src="../static/vendor/popper.js/dist/umd/popper.min.js"></script>
+<script src="../static/vendor/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="../static/vendor/headroom.js/dist/headroom.min.js"></script>
+
+<!-- Vendor JS -->
+<script src="../static/vendor/onscreen/dist/on-screen.umd.min.js"></script>
+<script src="../static/vendor/nouislider/distribute/nouislider.min.js"></script>
+<script src="../static/vendor/jarallax/dist/jarallax.min.js"></script>
+<script src="../static/vendor/smooth-scroll/dist/smooth-scroll.polyfills.min.js"></script>
+<script src="../static/vendor/prismjs/prism.js"></script>
+<script src="../static/vendor/vivus/dist/vivus.min.js"></script>
+<script src="../static/vendor/chartist/dist/chartist.min.js"></script>
+<script src="../static/vendor/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+<script src="../static/vendor/@glidejs/glide/dist/glide.min.js"></script>
+<script src="../static/vendor/countup.js/dist/countUp.umd.js"></script>
+<script src="../static/vendor/vanillajs-datepicker/dist/js/datepicker.min.js"></script>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+<!-- pixel JS -->
+<script src="../static/assets/js/pixel.js"></script>
+
+</body>
+
+</html>
 {{end}}
-{{/* END OF HEADER */}}
-
-
-
-
-
-{{/* ####################
-START OF FOOTER TEMPLATE!
-#################### */}}
-{{define "footer"}}
-    </div>
-    </div>
-    <!-- END : End Main Content-->
-
-    <!-- BEGIN : Footer-->
-    <footer class="footer undefined undefined">
-        {{.Footer}}
-    </footer>
-    <!-- End : Footer-->
-    <!-- Scroll to top button -->
-
-    </div>
-    </div>
-    <!-- ////////////////////////////////////////////////////////////////////////////-->
-
-    <div class="sidenav-overlay"></div>
-    <div class="drag-target"></div>
-    <!-- BEGIN VENDOR JS-->
-    <script src="../static/js/vendors/vendors.min.js"></script>
-    <script src="../static/js/vendors/switchery.min.js"></script>
-    <!-- BEGIN VENDOR JS-->
-    <!-- BEGIN PAGE VENDOR JS-->
-    <!-- END PAGE VENDOR JS-->
-    <!-- BEGIN APEX JS-->
-    <script src="../static/js/core/app-menu.js"></script>
-    <script src="../static/js/core/app.js"></script>
-    <script src="../static/js/notification-sidebar.js"></script>
-    <script src="../static/js/customizer.js"></script>
-    <!-- END APEX JS-->
-    <!-- BEGIN PAGE LEVEL JS-->
-    <!-- END PAGE LEVEL JS-->
-    <!-- BEGIN: Custom CSS-->
-    <script src="../static/js/scripts.js"></script>
-    <!-- END: Custom CSS-->
-    </body>
-    <!-- END : Body-->
-
-    </html>
-{{end}}
-{{/* END OF FOOTER */}}

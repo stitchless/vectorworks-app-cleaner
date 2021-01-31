@@ -9,47 +9,44 @@ import (
 	"regexp"
 )
 
-func FindAndChooseLicense(softwareName string) string {
-	var licenses []string
+func fetchAppYears(softwareName string) []Version {
+	var appYears []string
+	var versions []Version
+	configs := map[string]softwareConfig{}
 
 	re := regexp.MustCompile("[0-9]+")
 
-	folders, err := ioutil.ReadDir(os.Getenv("APPDATA") + "/Nemetschek/" + softwareName)
-	if err != nil {
-		log.Fatal(err)
-	}
+	folders, _ := ioutil.ReadDir(os.Getenv("APPDATA") + "/Nemetschek/" + softwareName)
 
 	for _, f := range folders {
 		appYear := re.FindString(f.Name())
-		licenses = append(licenses, appYear)
+		if appYear != "" {
+			appYears = append(appYears, appYear)
+		}
 	}
-	return chooseLicense(softwareName, licenses)
+
+	if len(appYears) == 0 {
+		return nil
+	}
+
+	for _, year := range appYears {
+		configs[year] = generateConfig(softwareName, year)
+		version := Version{Year: year, Serial: getSerial(configs[year]), Config: configs[year]}
+		versions = append(versions, version)
+	}
+
+	return versions
 }
 
 func getSerial(config softwareConfig) string {
-	key, err := registry.OpenKey(registry.CURRENT_USER, config.license, registry.QUERY_VALUE)
-	if err != nil {
-		log.Fatal(err)
-	}
+	key, _ := registry.OpenKey(registry.CURRENT_USER, config.license , registry.QUERY_VALUE)
 
 	defer func() {
-		err = key.Close()
-		if err != nil {
-			log.Fatal(err)
-		}
+		_ = key.Close()
 	}()
 
-	serial, _, err := key.GetStringValue("User Serial Number")
-	if err != nil {
-		log.Fatal(err)
-	}
-	// TESTING
-	// TODO: Remove Printf
-	//fmt.Printf("License is: %q\n", serial)
-	//err = key.Close()
-	//if err != nil {
-	//	log.Fatalf("Error Closing Registry: %e", err)
-	//}
+	serial, _, _ := key.GetStringValue("User Serial Number")
+
 	return serial
 }
 

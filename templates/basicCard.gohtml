@@ -3,8 +3,6 @@
         <h5 class="card-header">{{.Title}}</h5>
         <div class="card-body">
             <p class="card-text">{{.Description}}</p>
-        </div>
-        <div class="card-footer">
             <form hidden action="/{{.Action}}" method="post" id="{{.Action}}"></form>
             <button class="btn btn-primary" type="submit" form="{{.Action}}">{{.Button}}</button>
         </div>
