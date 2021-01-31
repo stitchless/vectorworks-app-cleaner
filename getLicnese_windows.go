@@ -9,13 +9,14 @@ import (
 	"regexp"
 )
 
-func fetchAppYears(softwareName string) []Version {
+// fetchAppInfo fetches the application Year[string], License[string], and a config[map]
+// This config will hold license location registries and directories
+// In case no entries are found a nil will be returned
+func fetchAppInfo(softwareName string) []Version {
 	var appYears []string
 	var versions []Version
 	configs := map[string]softwareConfig{}
-
 	re := regexp.MustCompile("[0-9]+")
-
 	folders, _ := ioutil.ReadDir(os.Getenv("APPDATA") + "/Nemetschek/" + softwareName)
 
 	for _, f := range folders {
@@ -25,10 +26,12 @@ func fetchAppYears(softwareName string) []Version {
 		}
 	}
 
+	// In case no versions are found, we stop from proceeding and return nil
 	if len(appYears) == 0 {
 		return nil
 	}
 
+	// Attach configs, versions, and app years all into on object then return that object
 	for _, year := range appYears {
 		configs[year] = generateConfig(softwareName, year)
 		version := Version{Year: year, Serial: getSerial(configs[year]), Config: configs[year]}
@@ -37,6 +40,8 @@ func fetchAppYears(softwareName string) []Version {
 
 	return versions
 }
+
+
 
 func getSerial(config softwareConfig) string {
 	key, _ := registry.OpenKey(registry.CURRENT_USER, config.license , registry.QUERY_VALUE)
@@ -50,6 +55,8 @@ func getSerial(config softwareConfig) string {
 	return serial
 }
 
+
+
 func inputNewSerial(serial string) string {
 	newSerial, _, err := dlgs.Entry("Input New Serial", "Please input a new Series E Serial:", serial)
 	if err != nil {
@@ -57,6 +64,8 @@ func inputNewSerial(serial string) string {
 	}
 	return newSerial
 }
+
+
 
 func replaceOldSerial(newSerial string, config softwareConfig) {
 	// TODO: Clean the input before replacing.

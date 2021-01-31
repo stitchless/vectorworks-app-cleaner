@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gen2brain/dlgs"
 	"github.com/webview/webview"
 	"html/template"
@@ -104,8 +105,9 @@ func webApp() {
 // TODO: Get VW Versions, Get Vision Version, Determine if VCS is installed
 
 func homePageHandler(w http.ResponseWriter, r *http.Request) {
-	vectorworksVersions := fetchAppYears("Vectorworks")
-	visVersions := fetchAppYears("Vision")
+	vectorworksVersions := fetchAppInfo("Vectorworks")
+	visVersions := fetchAppInfo("Vision")
+	fmt.Println(visVersions)
 
 	homeScreen := htmlValues{
 		Title:       "Welcome to the Vectorworks Utility Tool",

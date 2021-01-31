@@ -18,35 +18,37 @@
                     </tr>
                     </thead>
                     {{ range $index , $element := .Versions }}
-                        <tbody>
-                        <tr>
-                            <th scope="row">{{inc $index}}</th>
-                            <td>
-                                <div class="d-flex align-items-left">
-                                    {{.Year}}
-                                </div>
-                            </td>
-                            <td>
-                                {{.Serial}}
-                                <div class="d-inline-flex">
-                                    <i class="fas fa-edit mr-3" data-toggle="tooltip" data-placement="top"
-                                       title="Edit Serial"></i>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex">
-                                    <i class="fas fa-trash text-danger mr-2" data-toggle="tooltip"
-                                       data-placement="top"
-                                       title="Delete "></i>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
+                        {{if .Year}}
+                            <tbody>
+                            <tr>
+                                <th scope="row">{{inc $index}}</th>
+                                <td>
+                                    <div class="d-flex align-items-left">
+                                        {{.Year}}
+                                    </div>
+                                </td>
+                                <td>
+                                    {{.Serial}}
+                                    <div class="d-inline-flex">
+                                        <i class="fas fa-edit mr-3" data-toggle="tooltip" data-placement="top"
+                                           title="Edit Serial"></i>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex">
+                                        <i class="fas fa-trash text-danger mr-2" data-toggle="tooltip"
+                                           data-placement="top"
+                                           title="Delete "></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        {{ else }}
+                            <div class="">No licenses were found for this software...</div>
+                        {{end}}
                     {{end}}
                 </table>
-                {{/*                {{ else }}*/}}
-                {{/*                    <span class="text-muted">No licenses were found for this software...</span>*/}}
-                {{/*                {{end}}*/}}
+
             {{end}}
         </div>
     </div>
