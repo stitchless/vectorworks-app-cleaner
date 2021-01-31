@@ -24,6 +24,28 @@ type softwareConfig struct {
 	vision      []string
 }
 
+type htmlValues struct {
+	Title       string
+	Description string
+	Label       []string
+	Card        []card
+}
+
+type card struct {
+	Title       string
+	Description string
+	Header      string
+	Button      string
+	Action      string
+	Options     []button
+}
+
+// used if multiple buttons appear on a card
+type button struct {
+	Label  string
+	Action string
+}
+
 // Set up and run the webview.
 func main() {
 	// Define users home directory
@@ -33,8 +55,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	tmpl = template.Must(template.ParseGlob(dir+"/templates/*.gohtml"))
-	template.Must(tmpl.ParseGlob(dir+"/views/*.gohtml"))
+	tmpl = template.Must(template.ParseGlob(dir + "/templates/*.gohtml"))
+	template.Must(tmpl.ParseGlob(dir + "/views/*.gohtml"))
 
 	go webApp()
 
@@ -59,7 +81,7 @@ func webApp() {
 	mux := http.NewServeMux()
 	// Routes
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(dir+"/static"))))
-	mux.HandleFunc("/", basePageHandler)
+	mux.HandleFunc("/", homePageHandler)
 	//mux.HandleFunc("/chooseYear", chooseYearHandler)
 	//mux.HandleFunc("/chooseAction", chooseActionHandler)
 	//mux.HandleFunc("/replaceLicense", replaceLicenseHandler)
@@ -77,28 +99,18 @@ func webApp() {
 	check(err)
 }
 
-type MyList struct {
-	Option	string
-	Done	bool
-}
-
-type testData struct {
-	Title	string
-	MyList	*[]MyList
-
-}
-
-func basePageHandler(w http.ResponseWriter, r *http.Request) {
-	// Get Data
-	derpData := testData{
-		Title: "Herp Derp",
-		MyList: &[]MyList{
-			{Option: "Option 1", Done: true},
-			{Option: "Option 2", Done: false},
-			{Option: "Option 3", Done: true},
+func homePageHandler(w http.ResponseWriter, r *http.Request) {
+	homeScreen := htmlValues{
+		Title:       "Pleas Select what you would like to do.",
+		Description: "This application will work for Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.",
+		Label:       []string{"Clean Application", "Change Serial"},
+		Card: []card{
+			{Title: "Clean Application", Button: "Start", Action: "cleanApp"},
+			{Title: "Change Serial", Button: "Start", Action: "cleanApp"},
 		},
 	}
-	err := tmpl.ExecuteTemplate(w, "homePage", derpData)
+
+	err := tmpl.ExecuteTemplate(w, "homePage", homeScreen)
 	check(err)
 }
 
@@ -115,7 +127,6 @@ func basePageHandler(w http.ResponseWriter, r *http.Request) {
 //license := FindAndChooseLicense(softwareName)   // Find and Choose Versions of software based on license
 //config := generateConfig(softwareName, license) // generate proper data for select license version
 //chooseAction(config)
-
 
 // Allow user to choose which licence to start working with.
 func chooseLicense(softwareName string, licenses []string) string {

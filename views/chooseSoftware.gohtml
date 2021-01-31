@@ -1,7 +1,15 @@
 {{ define "homePage" }}
-{{template "header"}}
-test
-{{template "basicCard"}}
-
-{{template "footer"}}
+    {{template "header"}}
+    <div class="row text-center">
+        <h2>{{.Title}}</h2>
+    </div>
+    <div class="row">
+        {{ range .Card }}
+            <div class="col-sm-6">
+                {{ template "basicCard" .}}
+            </div>
+        {{ end }}
+        {{.Description}}
+    </div>
+    {{template "footer"}}
 {{ end }}
