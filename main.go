@@ -7,12 +7,14 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
 )
 
-// TODO: Refactor to use WebUI as opposed to a series of dialogs.
+// Globals
+var homeDir, _ = os.UserHomeDir()
+var dir string
+var tmpl *template.Template
 
-// Data
+// software Information
 type softwareConfig struct {
 	plist       []string
 	registry    []string
@@ -22,69 +24,81 @@ type softwareConfig struct {
 	vision      []string
 }
 
-// Home Directory OS dependent
-var homeDir, _ = os.UserHomeDir()
-
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-var dir string
-
-func init() {
-	//events := make(chan string, 1000)
-
+// Set up and run the webview.
+func main() {
+	// Define users home directory
 	var err error
 	dir, err = os.Getwd()
 	if err != nil {
 		log.Fatal(err)
 	}
-}
 
-type PageVariables struct {
-	Date         string
-	Time         string
-}
+	tmpl = template.Must(template.ParseGlob(dir+"/templates/*.gohtml"))
+	template.Must(tmpl.ParseGlob(dir+"/views/*.gohtml"))
 
-func HomePage(w http.ResponseWriter, r *http.Request) {
-	now := time.Now() // find the time right now
-	HomePageVars := PageVariables{ //store the date and time in a struct
-		Date: now.Format("02-01-2006"),
-		Time: now.Format("15:04:05"),
-	}
+	go webApp()
 
-	t, err := template.ParseFiles("index.html") //parse the html file homepage.html
-	if err != nil { // if there is an error
-		log.Print("template parsing error: ", err) // log it
-	}
-	err = t.Execute(w, HomePageVars) //execute the template and pass it the HomePageVars struct to fill in the gaps
-	if err != nil { // if there is an error
-		log.Print("template executing error: ", err) //log it
-	}
-}
-
-func main() {
-	go app()
 	// Set up Webview
 	debug := true
 	w := webview.New(debug)
 	defer w.Destroy()
 	w.SetTitle("Vectorworks, Inc.")
 	w.SetSize(1200, 850, webview.HintNone)
-	w.Navigate("http://127.0.0.1:12346/public/html/index.html")
+	w.Navigate("http://127.0.0.1:12346")
 	w.Run()
 }
 
-func app() {
+// Error Checking
+func check(e error) {
+	if e != nil {
+		panic(e)
+	}
+}
+
+func webApp() {
 	mux := http.NewServeMux()
-	mux.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir(dir+"/public"))))
+	// Routes
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(dir+"/static"))))
+	mux.HandleFunc("/", basePageHandler)
+	//mux.HandleFunc("/chooseYear", chooseYearHandler)
+	//mux.HandleFunc("/chooseAction", chooseActionHandler)
+	//mux.HandleFunc("/replaceLicense", replaceLicenseHandler)
+	//mux.HandleFunc("/cleanApp", cleanAppHandler)
+	//mux.HandleFunc("/cancel", cancelHandler)
+	//mux.HandleFunc("/", catchAllHandler)
+
+	// Configure the webserver
 	webServer := &http.Server{
 		Addr:    "127.0.0.1:12346",
 		Handler: mux,
 	}
+	//Start the web server
 	err := webServer.ListenAndServe()
+	check(err)
+}
+
+type MyList struct {
+	Option	string
+	Done	bool
+}
+
+type testData struct {
+	Title	string
+	MyList	*[]MyList
+
+}
+
+func basePageHandler(w http.ResponseWriter, r *http.Request) {
+	// Get Data
+	derpData := testData{
+		Title: "Herp Derp",
+		MyList: &[]MyList{
+			{Option: "Option 1", Done: true},
+			{Option: "Option 2", Done: false},
+			{Option: "Option 3", Done: true},
+		},
+	}
+	err := tmpl.ExecuteTemplate(w, "homePage", derpData)
 	check(err)
 }
 
