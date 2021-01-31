@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/gen2brain/dlgs"
 	"github.com/webview/webview"
 	"html/template"
 	"log"
@@ -52,7 +51,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// Needed
+	// funcMap needed in order to define custom functions within go templates
 	funcMap := template.FuncMap{
 		// Increments int by 1 (Used to illustrate table views)
 		"inc": func(i int) int {
@@ -81,16 +80,13 @@ func check(e error) {
 	}
 }
 
+// webApp Creates all Mux objects, Handlers, configures the web server and
+// deploys the http server on http://127.0.0.1:12346
 func webApp() {
 	mux := http.NewServeMux()
 	// Routes
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(dir+"/static"))))
 	mux.HandleFunc("/", homePageHandler) // Also catch all
-	//mux.HandleFunc("/chooseYear", chooseYearHandler)
-	//mux.HandleFunc("/chooseAction", chooseActionHandler)
-	//mux.HandleFunc("/replaceLicense", replaceLicenseHandler)
-	//mux.HandleFunc("/cleanApp", cleanAppHandler)
-	//mux.HandleFunc("/cancel", cancelHandler)
 
 	// Configure the webserver
 	webServer := &http.Server{
@@ -102,8 +98,12 @@ func webApp() {
 	check(err)
 }
 
-// TODO: Get VW Versions, Get Vision Version, Determine if VCS is installed
+// TODO: Get Vectorworks Info [Done]
+// TODO: Get Vision Info [WIP]
+// TODO: Determine if VCS is installed
 
+// homePageHandler is the initial page with all software information held on it.
+// From this screen you can edit license info or clean up application data.
 func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	vectorworksVersions := fetchAppInfo("Vectorworks")
 	visVersions := fetchAppInfo("Vision")
@@ -122,41 +122,5 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	err := tmpl.ExecuteTemplate(w, "homePageAlt", homeScreen)
 	check(err)
 }
-
 // TODO: Separate views based on license type or localizations via Tabs
-// TODO: Shows all results on screen with actions next to each version
 // TODO: Show Actions as Modals?
-
-// Allow user to choose which licence to start working with.
-func chooseLicense(softwareName string, licenses []string) string {
-	pickedLicense, _, err := dlgs.List("Choose your license", "Please pick from the list of found "+softwareName+" licenses.", licenses)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return pickedLicense // return string with 4 digits representing the application license year.
-}
-
-func chooseAction(config softwareConfig) {
-	items := []string{"Clean Application", "Clean VCS", "Replace License"}
-	choice, _, err := dlgs.List("Chose your action", "What would you like to do?", items)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	switch choice {
-	// Replace old license with new one
-	case "Replace License":
-		//serial := getSerial(config)
-		//newSerial := inputNewSerial(serial)
-		//replaceOldSerial(newSerial, config)
-	// Remove all VCS directories
-	// TODO: Move this to first step.
-	case "Clean VCS":
-		cleanVCS(config)
-	// Removes all properties and files/folders for the given software/version
-	case "Clean Application":
-		cleanApplication(config)
-	}
-
-	_, _ = dlgs.Info("Finished!", choice+" is finished running")
-}

@@ -9,7 +9,7 @@ import (
 	"regexp"
 )
 
-// fetchAppInfo fetches the application Year[string], License[string], and a config[map]
+// fetchAppInfo fetches the application Year[string], License[string] via getSerial, and a config[map]
 // This config will hold license location registries and directories
 // In case no entries are found a nil will be returned
 func fetchAppInfo(softwareName string) []Version {
@@ -42,7 +42,7 @@ func fetchAppInfo(softwareName string) []Version {
 }
 
 
-
+// getSerial will search the registry for any valid serials.
 func getSerial(config softwareConfig) string {
 	key, _ := registry.OpenKey(registry.CURRENT_USER, config.license , registry.QUERY_VALUE)
 
