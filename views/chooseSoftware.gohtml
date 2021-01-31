@@ -1,15 +1,22 @@
 {{ define "homePage" }}
     {{template "header"}}
     <div class="row text-center">
-        <h2>{{.Title}}</h2>
+        <h3>{{.Title}}</h3>
     </div>
     <div class="row">
-        {{ range .Card }}
-            <div class="col-sm-6">
-                {{ template "basicCard" .}}
+        <div class="card-deck">
+            {{ range $index, $_ :=.Card }}
+        {{ if eq $index 0}}
+            <div class="col-sm-5 offset-1 d-flex align-items-stretch">
+                {{else}}
+                <div class="col-sm-5 d-flex align-items-stretch">
+                    {{end}}
+                    {{ template "basicCard" .}}
+                </div>
+                {{ end }}
             </div>
-        {{ end }}
-        {{.Description}}
+            {{.Description}}
+        </div>
+        {{template "footer" .}}
     </div>
-    {{template "footer"}}
 {{ end }}

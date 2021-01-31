@@ -1,3 +1,6 @@
+{{/* ####################
+START OF HEADER TEMPLATE!
+#################### */}}
 {{define "header"}}
     <!DOCTYPE html>
 
@@ -49,7 +52,7 @@
 
     <!-- BEGIN : Body-->
 
-    <body class="horizontal-layout horizontal-menu horizontal-menu-padding 2-columns  navbar-sticky" data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
+    <body class="horizontal-layout" data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
     <!-- ////////////////////////////////////////////////////////////////////////////-->
     <div class="wrapper">
     <div class="main-panel">
@@ -58,13 +61,15 @@
     <div class="content-overlay"></div>
     <div class="content-wrapper">
 {{end}}
+{{/* END OF HEADER */}}
 
 
 
 
 
-
-
+{{/* ####################
+START OF FOOTER TEMPLATE!
+#################### */}}
 {{define "footer"}}
     </div>
     </div>
@@ -72,14 +77,10 @@
 
     <!-- BEGIN : Footer-->
     <footer class="footer undefined undefined">
-        <p class="clearfix text-muted m-0"><span>Copyright &copy; 2020 &nbsp;</span><a
-                    href="https://themeforest.net/user/pixinvent/portfolio?ref=pixinvent" id="pixinventLink"
-                    target="_blank">PIXINVENT</a><span class="d-none d-sm-inline-block">, All rights reserved.</span>
-        </p>
+        {{.Footer}}
     </footer>
     <!-- End : Footer-->
     <!-- Scroll to top button -->
-    <button class="btn btn-primary scroll-top" type="button"><i class="ft-arrow-up"></i></button>
 
     </div>
     </div>
@@ -109,3 +110,4 @@
 
     </html>
 {{end}}
+{{/* END OF FOOTER */}}

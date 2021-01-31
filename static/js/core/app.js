@@ -11,9 +11,6 @@
   'use strict';
   var $html = $('html');
   var $body = $('body');
-  var $sidebar = $('.app-sidebar'),
-  $sidebar_img = $sidebar.data('image'),
-  $sidebar_img_container = $('.sidebar-background');
 
 
   function scrollTopFn(){
@@ -81,11 +78,6 @@
       Unison.on("change", function (bp) {
           $.app.menu.change();
       });
-
-      // Menu background image on load
-      if ($sidebar_img_container.length !== 0 && $sidebar_img !== undefined) {
-        $sidebar_img_container.css('background-image', 'url("' + $sidebar_img + '")');
-      }
 
       // Tooltip Initialization
       $('[data-toggle="tooltip"]').tooltip({

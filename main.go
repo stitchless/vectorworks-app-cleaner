@@ -29,6 +29,7 @@ type htmlValues struct {
 	Description string
 	Label       []string
 	Card        []card
+	Footer      string
 }
 
 type card struct {
@@ -61,11 +62,10 @@ func main() {
 	go webApp()
 
 	// Set up Webview
-	debug := true
-	w := webview.New(debug)
+	w := webview.New(true)
 	defer w.Destroy()
 	w.SetTitle("Vectorworks, Inc.")
-	w.SetSize(1200, 850, webview.HintNone)
+	w.SetSize(800, 600, webview.HintFixed)
 	w.Navigate("http://127.0.0.1:12346")
 	w.Run()
 }
@@ -81,13 +81,12 @@ func webApp() {
 	mux := http.NewServeMux()
 	// Routes
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(dir+"/static"))))
-	mux.HandleFunc("/", homePageHandler)
+	mux.HandleFunc("/", homePageHandler) // Also catch all
 	//mux.HandleFunc("/chooseYear", chooseYearHandler)
 	//mux.HandleFunc("/chooseAction", chooseActionHandler)
 	//mux.HandleFunc("/replaceLicense", replaceLicenseHandler)
-	//mux.HandleFunc("/cleanApp", cleanAppHandler)
+	mux.HandleFunc("/cleanApp", cleanAppHandler)
 	//mux.HandleFunc("/cancel", cancelHandler)
-	//mux.HandleFunc("/", catchAllHandler)
 
 	// Configure the webserver
 	webServer := &http.Server{
@@ -101,7 +100,22 @@ func webApp() {
 
 func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	homeScreen := htmlValues{
-		Title:       "Pleas Select what you would like to do.",
+		Title:  "Pleas Select what you would like to do.",
+		Footer: "This application will work for Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.",
+		Label:  []string{"Clean Application", "Change Serial"},
+		Card: []card{
+			{Title: "Clean Application", Description: "Remove all plist/registry entries for a given version and all depended directories", Button: "Start", Action: "cleanApp"},
+			{Title: "Change Serial", Description: "This will change the serial of the given software version and if needed, refresh the OS to reload cache so no restart is needed.", Button: "Start", Action: "changeSerial"},
+		},
+	}
+
+	err := tmpl.ExecuteTemplate(w, "homePageAlt", homeScreen)
+	check(err)
+}
+
+func cleanAppHandler(w http.ResponseWriter, r *http.Request) {
+	homeScreen := htmlValues{
+		Title:       "SUCESS!",
 		Description: "This application will work for Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.",
 		Label:       []string{"Clean Application", "Change Serial"},
 		Card: []card{
