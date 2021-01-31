@@ -1,5 +1,6 @@
-{{ define "header" }}
+{{define "header"}}
     <!DOCTYPE html>
+
     <html class="loading" lang="en">
     <!-- BEGIN : Head-->
 
@@ -38,7 +39,7 @@
         <link rel="stylesheet" href="../static/css/plugins/switchery.css">
         <!-- END APEX CSS-->
         <!-- BEGIN Page Level CSS-->
-        <!--    <link rel="stylesheet" type="text/css" href="../../../app-assets/css/core/menu/horizontal-menu.css">-->
+        {{/*    <link rel="stylesheet" type="text/css" href="../../../app-assets/css/core/menu/horizontal-menu.css">*/}}
         <!-- END Page Level CSS-->
         <!-- BEGIN: Custom CSS-->
         <link rel="stylesheet" type="text/css" href="../static/css/style.css">
@@ -48,14 +49,63 @@
 
     <!-- BEGIN : Body-->
 
-    <body class="horizontal-layout horizontal-menu horizontal-menu-padding 2-columns  navbar-static layout-dark layout-transparent bg-glass-2"
-          data-bg-img="bg-glass-2" data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
-
+    <body class="horizontal-layout horizontal-menu horizontal-menu-padding 2-columns  navbar-sticky" data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
     <!-- ////////////////////////////////////////////////////////////////////////////-->
     <div class="wrapper">
-        <div class="main-panel">
-            <div class="main-content">
-                <div class="content-overlay"></div>
-                <div class="content-wrapper">
-                    <!-- Main Content Area -->
-{{ end }}
+    <div class="main-panel">
+    <!-- BEGIN : Main Content-->
+    <div class="main-content">
+    <div class="content-overlay"></div>
+    <div class="content-wrapper">
+{{end}}
+
+
+
+
+
+
+
+{{define "footer"}}
+    </div>
+    </div>
+    <!-- END : End Main Content-->
+
+    <!-- BEGIN : Footer-->
+    <footer class="footer undefined undefined">
+        <p class="clearfix text-muted m-0"><span>Copyright &copy; 2020 &nbsp;</span><a
+                    href="https://themeforest.net/user/pixinvent/portfolio?ref=pixinvent" id="pixinventLink"
+                    target="_blank">PIXINVENT</a><span class="d-none d-sm-inline-block">, All rights reserved.</span>
+        </p>
+    </footer>
+    <!-- End : Footer-->
+    <!-- Scroll to top button -->
+    <button class="btn btn-primary scroll-top" type="button"><i class="ft-arrow-up"></i></button>
+
+    </div>
+    </div>
+    <!-- ////////////////////////////////////////////////////////////////////////////-->
+
+    <div class="sidenav-overlay"></div>
+    <div class="drag-target"></div>
+    <!-- BEGIN VENDOR JS-->
+    <script src="../static/js/vendors/vendors.min.js"></script>
+    <script src="../static/js/vendors/switchery.min.js"></script>
+    <!-- BEGIN VENDOR JS-->
+    <!-- BEGIN PAGE VENDOR JS-->
+    <!-- END PAGE VENDOR JS-->
+    <!-- BEGIN APEX JS-->
+    <script src="../static/js/core/app-menu.js"></script>
+    <script src="../static/js/core/app.js"></script>
+    <script src="../static/js/notification-sidebar.js"></script>
+    <script src="../static/js/customizer.js"></script>
+    <!-- END APEX JS-->
+    <!-- BEGIN PAGE LEVEL JS-->
+    <!-- END PAGE LEVEL JS-->
+    <!-- BEGIN: Custom CSS-->
+    <script src="../static/js/scripts.js"></script>
+    <!-- END: Custom CSS-->
+    </body>
+    <!-- END : Body-->
+
+    </html>
+{{end}}

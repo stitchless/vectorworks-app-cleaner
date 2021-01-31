@@ -106,7 +106,7 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 		Label:       []string{"Clean Application", "Change Serial"},
 		Card: []card{
 			{Title: "Clean Application", Button: "Start", Action: "cleanApp"},
-			{Title: "Change Serial", Button: "Start", Action: "cleanApp"},
+			{Title: "Change Serial", Button: "Start", Action: "changeSerial"},
 		},
 	}
 
