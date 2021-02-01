@@ -17,7 +17,16 @@ func fetchAppInfo(softwareName string) []Version {
 	var versions []Version
 	configs := map[string]softwareConfig{}
 	re := regexp.MustCompile("[0-9]+")
-	folders, _ := ioutil.ReadDir(os.Getenv("APPDATA") + "/Nemetschek/" + softwareName)
+	var softwareFolder string
+
+	// Different software has different locations
+	if softwareName == "Vectorworks" {
+		softwareFolder = os.Getenv("APPDATA") + "/Nemetschek/Vectorworks"
+	} else if softwareName == "Vision" {
+		softwareFolder = os.Getenv("APPDATA") + "/Vision"
+	}
+	folders, _ := ioutil.ReadDir(softwareFolder)
+
 
 	for _, f := range folders {
 		appYear := re.FindString(f.Name())
@@ -34,7 +43,7 @@ func fetchAppInfo(softwareName string) []Version {
 	// Attach configs, versions, and app years all into on object then return that object
 	for _, year := range appYears {
 		configs[year] = generateConfig(softwareName, year)
-		version := Version{Year: year, Serial: getSerial(configs[year]), Config: configs[year]}
+		version := Version{Year: year, Serial: getSerial(configs[year], softwareName), Config: configs[year]}
 		versions = append(versions, version)
 	}
 
@@ -43,16 +52,20 @@ func fetchAppInfo(softwareName string) []Version {
 
 
 // getSerial will search the registry for any valid serials.
-func getSerial(config softwareConfig) string {
+func getSerial(config softwareConfig, softwareName string) string {
 	key, _ := registry.OpenKey(registry.CURRENT_USER, config.license , registry.QUERY_VALUE)
 
 	defer func() {
 		_ = key.Close()
 	}()
-
-	serial, _, _ := key.GetStringValue("User Serial Number")
-
-	return serial
+	if softwareName == "Vectorworks" {
+		serial, _, _ := key.GetStringValue("User Serial Number")
+		return serial
+	} else if softwareName == "Vision" {
+		serial, _, _ := key.GetStringValue("")
+		return serial
+	}
+	return ""
 }
 
 

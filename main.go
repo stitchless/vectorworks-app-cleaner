@@ -68,7 +68,7 @@ func main() {
 	w := webview.New(true)
 	defer w.Destroy()
 	w.SetTitle("Vectorworks, Inc. - Application Utility Tool")
-	w.SetSize(800, 600, webview.HintFixed)
+	w.SetSize(1000, 700, webview.HintFixed)
 	w.Navigate("http://127.0.0.1:12346")
 	w.Run()
 }
@@ -87,6 +87,7 @@ func webApp() {
 	// Routes
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(dir+"/static"))))
 	mux.HandleFunc("/", homePageHandler) // Also catch all
+	mux.HandleFunc("/editSerial", editSerialHandler) // Also catch all
 
 	// Configure the webserver
 	webServer := &http.Server{
@@ -107,6 +108,27 @@ func webApp() {
 func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	vectorworksVersions := fetchAppInfo("Vectorworks")
 	visVersions := fetchAppInfo("Vision")
+
+	homeScreen := htmlValues{
+		Title:       "Welcome to the Vectorworks Utility Tool",
+		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
+		Software: []Software{
+			{Name: "Vectorworks", Versions: vectorworksVersions},
+			{Name: "Vision", Versions: visVersions},
+		},
+		Footer: "This application will work for Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.",
+	}
+
+	err := tmpl.ExecuteTemplate(w, "homePage", homeScreen)
+	check(err)
+}
+// TODO: Separate views based on license type or localizations via Tabs
+// TODO: Show Actions as Modals?
+
+func editSerialHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.URL.Path)
+	vectorworksVersions := fetchAppInfo("Vectorworks")
+	visVersions := fetchAppInfo("Vision")
 	fmt.Println(visVersions)
 
 	homeScreen := htmlValues{
@@ -119,8 +141,6 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 		Footer: "This application will work for Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.",
 	}
 
-	err := tmpl.ExecuteTemplate(w, "homePageAlt", homeScreen)
+	err := tmpl.ExecuteTemplate(w, "homePage", homeScreen)
 	check(err)
 }
-// TODO: Separate views based on license type or localizations via Tabs
-// TODO: Show Actions as Modals?

@@ -1,0 +1,69 @@
+{{ define "homePage" }}
+    {{template "header"}}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 text-center">
+                <div class="card border-light px-4 py-5 text-center">
+                    <div class="card-header bg-white pb-0">
+                        <h2 class="h1 mb-3">{{.Title}}</h2>
+                    </div>
+                    <div class="card-body pt-2 px-0">
+                        {{ range .Software }}
+                            {{ $softwareName := .Name}}
+                            <h5>{{.Name}}</h5>
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Version</th>
+                                    <th scope="col">License</th>
+                                    <th class="text-center" scope="col">Actions</th>
+                                </tr>
+                                </thead>
+                                {{ range $index , $element := .Versions }}
+                                    {{if .Year}}
+                                        <tbody>
+                                        <tr>
+                                            <th scope="row">{{inc $index}}</th>
+                                            <td>
+                                                <div class="d-flex align-items-left">
+                                                    {{.Year}}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                {{.Serial}}
+                                                <div class="d-inline-flex">
+                                                    <i class="fas fa-edit mr-3" data-toggle="tooltip"
+                                                       data-placement="top"
+                                                       title="Edit Serial"></i>
+                                                    <form action="/editSerial" method="post">
+                                                        <input type="hidden" name="softwareName"
+                                                               value="{{$softwareName}}">
+                                                        <input type="hidden" name="softwareName" value="{{.Year}}">
+                                                    </form>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    <i class="fas fa-trash text-danger mr-2" data-toggle="tooltip"
+                                                       data-placement="top"
+                                                       title="Delete "></i>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    {{ else }}
+                                        <div class="">No licenses were found for this software...</div>
+                                    {{end}}
+                                {{end}}
+                            </table>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+        </div>
+    </div>
+    {{template "footer"}}
+{{ end }}

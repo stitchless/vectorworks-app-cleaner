@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 )
@@ -48,9 +49,15 @@ func generateConfig(softwareName string, licenseYear string) softwareConfig {
 			"SOFTWARE\\VectorWorks\\Vision "+ licenseYear,
 			"SOFTWARE\\VWVision\\Vision" + licenseYear,
 		}
+		directories := []string{
+			filepath.Join(winAppData, softwareName, licenseYear),
+			filepath.Join(winLocalAppData, "VisionUpdater"),
+
+		}
 		return softwareConfig{
 			license: license,
 			registry: registry,
+			directories: directories,
 		}
 	case "VCS":
 		vcs := []string{
