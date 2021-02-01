@@ -1,10 +1,13 @@
 package main
 
 func generateConfig(softwareName string, licenseYear string) softwareConfig {
-	if softwareName == "Vectorworks" { // Run if Vectorworks was picked
-		license := homeDir + "/Library/Preferences/net.nemetschek.vectorworks.license." + licenseYear + ".plist"
-
-		plist := []string{
+	var license string
+	var plist []string
+	var directories []string
+	switch softwareName {
+	case "Vectorworks":
+		license = homeDir + "/Library/Preferences/net.nemetschek.vectorworks.license." + licenseYear + ".plist"
+		plist = []string{
 			"net.nemetschek.vectorworks.license." + licenseYear + ".plist",
 			"net.nemetschek.vectorworks." + licenseYear + ".plist",
 			"net.nemetschek.vectorworks.spotlightimporter.plist",
@@ -13,39 +16,22 @@ func generateConfig(softwareName string, licenseYear string) softwareConfig {
 			"net.nemetschek.vectorworksinstaller.plist",
 			"net.vectorworks.vectorworks." + licenseYear + ".plist",
 		}
-		directories := []string{
+		directories = []string{
 			homeDir + "/Library/Application\\ Support/Vectorworks\\ RMCache/rm" + licenseYear,
 			homeDir + "/Library/Application\\ Support/Vectorworks\\ Cloud\\ Services",
 			homeDir + "/Library/Application\\ Support/Vectorworks/" + licenseYear,
 			homeDir + "/Library/Application\\ Support/vectorworks-installer-wrapper",
 		}
-
-		vision := []string{
-			"",
-		}
-
-		vcs := []string{
-			"",
-		}
-
-		return softwareConfig{
-			plist:       plist,
-			directories: directories,
-			license:     license,
-			vcs:         vcs,
-			vision:      vision,
-		}
-
-	} else { // Run if Vision was picked
-		license := "com.vwvision.Vision" + licenseYear + ".plist"
-		plist := []string{
+	case "Vision":
+		license = homeDir + "net.vectorworks.vision.license." + licenseYear + ".plist"
+		plist = []string{
 			"com.qtproject.plist",
 			"com.vwvision.Vision" + licenseYear + ".plist",
 			"com.yourcompany.Vision.plist",
 			"net.vectorworks.Vision.plist",
 			"net.vectorworks.vision.license." + licenseYear + ".plist",
 		}
-		directories := []string{
+		directories = []string{
 			homeDir + "/Library/Application\\ Support/Vision/" + licenseYear,
 			homeDir + "/Library/Application\\ Support/VisionUpdater",
 			"/Library/Frameworks/QtConcurrent.framework",
@@ -68,11 +54,11 @@ func generateConfig(softwareName string, licenseYear string) softwareConfig {
 			"/Library/Frameworks/rpath_manipulator.sh",
 			"/Library/Frameworks/setup_qt_frameworks.sh",
 		}
-
-		return softwareConfig{
-			plist:       plist,
-			directories: directories,
-			license:     license,
-		}
+	case "VCS":
+	}
+	return softwareConfig{
+		license: license,
+		plist: plist,
+		directories: directories,
 	}
 }
