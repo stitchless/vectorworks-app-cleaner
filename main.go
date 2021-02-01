@@ -16,6 +16,7 @@ var tmpl *template.Template
 
 type htmlValues struct {
 	Title       string
+	Preloader   bool
 	Description string
 	Software    []Software
 	Footer      string
@@ -86,7 +87,7 @@ func webApp() {
 	mux := http.NewServeMux()
 	// Routes
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(dir+"/static"))))
-	mux.HandleFunc("/", homePageHandler) // Also catch all
+	mux.HandleFunc("/", homePageHandler)             // Also catch all
 	mux.HandleFunc("/editSerial", editSerialHandler) // Also catch all
 
 	// Configure the webserver
@@ -110,6 +111,7 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	visVersions := fetchAppInfo("Vision")
 
 	homeScreen := htmlValues{
+		Preloader:   true,
 		Title:       "Welcome to the Vectorworks Utility Tool",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
 		Software: []Software{
@@ -122,6 +124,7 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	err := tmpl.ExecuteTemplate(w, "homePage", homeScreen)
 	check(err)
 }
+
 // TODO: Separate views based on license type or localizations via Tabs
 // TODO: Show Actions as Modals?
 
@@ -132,6 +135,7 @@ func editSerialHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(visVersions)
 
 	homeScreen := htmlValues{
+		Preloader: false,
 		Title:       "Welcome to the Vectorworks Utility Tool",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
 		Software: []Software{
