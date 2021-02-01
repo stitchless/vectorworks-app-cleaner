@@ -129,10 +129,10 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 // TODO: Show Actions as Modals?
 
 func editSerialHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Path)
+	r.ParseForm()
+	fmt.Println(r.Form)
 	vectorworksVersions := fetchAppInfo("Vectorworks")
 	visVersions := fetchAppInfo("Vision")
-	fmt.Println(visVersions)
 
 	homeScreen := htmlValues{
 		Preloader: false,
