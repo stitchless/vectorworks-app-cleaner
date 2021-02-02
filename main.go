@@ -19,6 +19,7 @@ type htmlValues struct {
 	Preloader   bool
 	Description string
 	Software    []Software
+	FormData	map[string]string
 }
 
 type Software struct {
@@ -27,8 +28,8 @@ type Software struct {
 }
 
 type Version struct {
-	Year    string
-	Serial  string
+	Year   string
+	Serial string
 }
 
 // software Information
@@ -51,6 +52,12 @@ func main() {
 		// Increments int by 1 (Used to illustrate table views)
 		"inc": func(i int) int {
 			return i + 1
+		},
+		"comp": func(val1 string, val2 string) bool {
+			if val1 == val2 {
+				return true
+			}
+			return false
 		},
 	}
 
@@ -82,7 +89,7 @@ func webApp() {
 	// Routes
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(dir+"/static"))))
 	mux.HandleFunc("/", homePageHandler)             // Also catch all
-	//mux.HandleFunc("/editSerial", editSerialHandler) // Also catch all
+	mux.HandleFunc("/editSerial", editSerialHandler) // Also catch all
 
 	// Configure the webserver
 	webServer := &http.Server{
@@ -104,7 +111,7 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	vectorworksVersions := fetchAppInfo("Vectorworks")
 	visVersions := fetchAppInfo("Vision")
 
-	homeScreen := htmlValues{
+	templateValues := htmlValues{
 		Preloader:   true,
 		Title:       "Welcome to the Vectorworks Utility Tool",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
@@ -114,7 +121,7 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	err := tmpl.ExecuteTemplate(w, "homePage", homeScreen)
+	err := tmpl.ExecuteTemplate(w, "homePage", templateValues)
 	check(err)
 }
 
@@ -122,21 +129,29 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 // TODO: Show Actions as Modals?
 
 func editSerialHandler(w http.ResponseWriter, r *http.Request) {
+	//var formData string
+	formData := make(map[string]string)
 	r.ParseForm()
 	fmt.Println(r.Form)
+	for key, value := range r.Form {
+		formData[key] = value[0]
+	}
+	//fmt.Println(formData)
+
 	vectorworksVersions := fetchAppInfo("Vectorworks")
 	visVersions := fetchAppInfo("Vision")
 
-	homeScreen := htmlValues{
+	templateValues := htmlValues{
 		Preloader:   false,
-		Title:       "Welcome to the Vectorworks Utility Tool",
+		Title:       "Welcome to the Vectorworks Utility Tool!",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
 		Software: []Software{
 			{Name: "Vectorworks", Versions: vectorworksVersions},
 			{Name: "Vision", Versions: visVersions},
 		},
+		FormData: formData,
 	}
 
-	err := tmpl.ExecuteTemplate(w, "homePage", homeScreen)
+	err := tmpl.ExecuteTemplate(w, "editSerial", templateValues)
 	check(err)
 }
