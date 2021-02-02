@@ -33,21 +33,30 @@
                                             </td>
                                             <td>
                                                 {{if (and (eq $formData.Name $softwareName) (eq $formData.Version.Year .Year) (eq $formData.Version.Serial .Serial))}}
-                                                    <input type="text">
-                                                    {{else}}
-                                                        {{.Serial}}
+                                                    <div class="input-group mb-1">
+                                                        <input type="text" class="form-control col-3"
+                                                               placeholder="{{.Serial}}">
+                                                        <button type="submit" class="btn btn-outline-secondary">
+                                                            <span><i class="fas fa-unlock-alt"></i></span>
+                                                        </button>
+                                                        <button type="submit" class="btn btn-outline-secondary">
+                                                            <span><i class="fas fa-unlock-alt"></i></span>
+                                                        </button>
+                                                    </div>
+                                                {{else}}
+                                                    {{.Serial}}
+                                                    <div class="d-inline-flex">
+                                                        <i class="fas fa-edit mr-3" data-toggle="modal"
+                                                           data-placement="top"
+                                                           title="Edit Serial" data-target="#modal-form"></i>
+                                                        <form action="/editSerial" method="post">
+                                                            <input type="hidden" name="softwareName"
+                                                                   value="{{$softwareName}}">
+                                                            <input type="hidden" name="appYear" value="{{.Year}}">
+                                                            <input type="hidden" name="serial" value="{{.Serial}}">
+                                                        </form>
+                                                    </div>
                                                 {{end}}
-                                                <div class="d-inline-flex">
-                                                    <i class="fas fa-edit mr-3" data-toggle="modal"
-                                                       data-placement="top"
-                                                       title="Edit Serial" data-target="#modal-form"></i>
-                                                    <form action="/editSerial" method="post">
-                                                        <input type="hidden" name="softwareName"
-                                                               value="{{$softwareName}}">
-                                                        <input type="hidden" name="appYear" value="{{.Year}}">
-                                                        <input type="hidden" name="serial" value="{{.Serial}}">
-                                                    </form>
-                                                </div>
                                             </td>
                                             <td>
                                                 <div class="d-flex justify-content-center">
