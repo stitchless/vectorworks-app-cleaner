@@ -7,10 +7,10 @@
                     <div class="card-header bg-white pb-0">
                         <h2 class="h1 mb-3">{{.Title}}</h2>
                     </div>
-                    {{/*                    {{ $Serial := .FormData.serial }}*/}}
+                    {{ $formData := .FormData }}
                     <div class="card-body pt-2 px-0">
                         {{ range .Software }}
-                            {{ $softwareName := .Name}}
+                            {{ $softwareName := .Name }}
                             <h5>{{.Name}}</h5>
                             <table class="table table-hover">
                                 <thead>
@@ -32,13 +32,11 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                {{/*                                                {{ $formSerial := 0 $formData "Serial"}}*/}}
-                                                {{/*                                                {{ $editField := comp $formSerial .Serial}}*/}}
-                                                {{/*                                                {{ if $editField }}*/}}
-                                                {{/*                                                    <input type="text">*/}}
-                                                {{/*                                                {{else}}*/}}
-                                                {{.Serial}}
-                                                {{/*                                                {{end}}*/}}
+                                                {{if (and (eq $formData.Name $softwareName) (eq $formData.Version.Year .Year) (eq $formData.Version.Serial .Serial))}}
+                                                    <input type="text">
+                                                    {{else}}
+                                                        {{.Serial}}
+                                                {{end}}
                                                 <div class="d-inline-flex">
                                                     <i class="fas fa-edit mr-3" data-toggle="modal"
                                                        data-placement="top"

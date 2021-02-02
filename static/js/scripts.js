@@ -16,8 +16,6 @@
             button.addEventListener('click', (event) => {
                 form.submit()
             });
-
-
         }
     })
 // })(window, document);

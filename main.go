@@ -19,7 +19,12 @@ type htmlValues struct {
 	Preloader   bool
 	Description string
 	Software    []Software
-	FormData	map[string]string
+	FormData FormData
+}
+
+type FormData struct {
+	Name string
+	Version Version
 }
 
 type Software struct {
@@ -129,14 +134,31 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 // TODO: Show Actions as Modals?
 
 func editSerialHandler(w http.ResponseWriter, r *http.Request) {
-	//var formData string
-	formData := make(map[string]string)
 	r.ParseForm()
+	var softwareName string
+	var appYear string
+	var serial string
+
 	fmt.Println(r.Form)
 	for key, value := range r.Form {
-		formData[key] = value[0]
+		switch key {
+		case "softwareName":
+			softwareName = value[0]
+		case "appYear":
+			appYear = value[0]
+		case "serial":
+			serial = value[0]
+		}
 	}
-	//fmt.Println(formData)
+
+	//var formData string
+	formData := FormData{
+		Name: softwareName,
+		Version:Version{
+			Year: appYear,
+			Serial: serial,
+		},
+	}
 
 	vectorworksVersions := fetchAppInfo("Vectorworks")
 	visVersions := fetchAppInfo("Vision")
