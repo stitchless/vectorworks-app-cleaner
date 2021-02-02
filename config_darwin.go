@@ -1,13 +1,11 @@
 package main
 
-func generateConfig(softwareName string, licenseYear string) softwareConfig {
-	var license string
-	var plist []string
+func generateConfig(softwareName string, licenseYear string) toBeCleaned {
+	var properties[]string
 	var directories []string
 	switch softwareName {
 	case "Vectorworks":
-		license = homeDir + "/Library/Preferences/net.nemetschek.vectorworks.license." + licenseYear + ".plist"
-		plist = []string{
+		properties = []string{
 			"net.nemetschek.vectorworks.license." + licenseYear + ".plist",
 			"net.nemetschek.vectorworks." + licenseYear + ".plist",
 			"net.nemetschek.vectorworks.spotlightimporter.plist",
@@ -23,8 +21,7 @@ func generateConfig(softwareName string, licenseYear string) softwareConfig {
 			homeDir + "/Library/Application\\ Support/vectorworks-installer-wrapper",
 		}
 	case "Vision":
-		license = homeDir + "net.vectorworks.vision.license." + licenseYear + ".plist"
-		plist = []string{
+		properties = []string{
 			"com.qtproject.plist",
 			"com.vwvision.Vision" + licenseYear + ".plist",
 			"com.yourcompany.Vision.plist",
@@ -56,9 +53,8 @@ func generateConfig(softwareName string, licenseYear string) softwareConfig {
 		}
 	case "VCS":
 	}
-	return softwareConfig{
-		license: license,
-		plist: plist,
-		directories: directories,
+	return toBeCleaned{
+		Properties: properties,
+		Directories: directories,
 	}
 }

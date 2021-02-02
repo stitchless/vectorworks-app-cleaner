@@ -15,7 +15,7 @@ import (
 func fetchAppInfo(softwareName string) []Version {
 	var appYears []string
 	var versions []Version
-	configs := map[string]softwareConfig{}
+	configs := map[string]toBeCleaned{}
 	re := regexp.MustCompile("[0-9]+")
 	var softwareFolder string
 
@@ -52,7 +52,7 @@ func fetchAppInfo(softwareName string) []Version {
 
 
 // getSerial will search the registry for any valid serials.
-func getSerial(config softwareConfig, softwareName string) string {
+func getSerial(config toBeCleaned, softwareName string) string {
 	key, _ := registry.OpenKey(registry.CURRENT_USER, config.license , registry.QUERY_VALUE)
 
 	defer func() {
@@ -80,7 +80,7 @@ func inputNewSerial(serial string) string {
 
 
 
-func replaceOldSerial(newSerial string, config softwareConfig) {
+func replaceOldSerial(newSerial string, config toBeCleaned) {
 	// TODO: Clean the input before replacing.
 	key, err := registry.OpenKey(registry.CURRENT_USER, config.license, registry.SET_VALUE)
 	if err != nil {

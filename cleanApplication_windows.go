@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func cleanApplication(config softwareConfig) {
+func cleanApplication(config toBeCleaned) {
 	// Deletes relevant registry entries for select software/version
 	for _, property := range config.registry {
 		k, _ := registry.OpenKey(registry.CURRENT_USER, property, registry.ALL_ACCESS)
@@ -27,7 +27,7 @@ func cleanApplication(config softwareConfig) {
 	}
 }
 
-func cleanVCS(config softwareConfig) {
+func cleanVCS(config toBeCleaned) {
 	for _, directory := range config.vcs {
 		_ = os.RemoveAll(directory)
 	}

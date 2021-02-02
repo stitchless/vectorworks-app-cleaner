@@ -19,7 +19,6 @@ type htmlValues struct {
 	Preloader   bool
 	Description string
 	Software    []Software
-	Footer      string
 }
 
 type Software struct {
@@ -28,19 +27,14 @@ type Software struct {
 }
 
 type Version struct {
-	Year   string
-	Serial string
-	Config softwareConfig
+	Year    string
+	Serial  string
 }
 
 // software Information
-type softwareConfig struct {
-	plist       []string
-	registry    []string
-	directories []string
-	license     string
-	vcs         []string
-	vision      []string
+type toBeCleaned struct {
+	Properties  []string
+	Directories []string
 }
 
 // Set up and run the webview.
@@ -88,7 +82,7 @@ func webApp() {
 	// Routes
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(dir+"/static"))))
 	mux.HandleFunc("/", homePageHandler)             // Also catch all
-	mux.HandleFunc("/editSerial", editSerialHandler) // Also catch all
+	//mux.HandleFunc("/editSerial", editSerialHandler) // Also catch all
 
 	// Configure the webserver
 	webServer := &http.Server{
@@ -118,7 +112,6 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 			{Name: "Vectorworks", Versions: vectorworksVersions},
 			{Name: "Vision", Versions: visVersions},
 		},
-		Footer: "This application will work for Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.",
 	}
 
 	err := tmpl.ExecuteTemplate(w, "homePage", homeScreen)
@@ -135,14 +128,13 @@ func editSerialHandler(w http.ResponseWriter, r *http.Request) {
 	visVersions := fetchAppInfo("Vision")
 
 	homeScreen := htmlValues{
-		Preloader: false,
+		Preloader:   false,
 		Title:       "Welcome to the Vectorworks Utility Tool",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
 		Software: []Software{
 			{Name: "Vectorworks", Versions: vectorworksVersions},
 			{Name: "Vision", Versions: visVersions},
 		},
-		Footer: "This application will work for Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.",
 	}
 
 	err := tmpl.ExecuteTemplate(w, "homePage", homeScreen)

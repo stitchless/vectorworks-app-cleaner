@@ -10,7 +10,7 @@ import (
 
 // generateConfig generates a series of locations and fill in missing information with teh version
 // year then returns them as a slice.
-func generateConfig(softwareName string, licenseYear string) softwareConfig {
+func generateConfig(softwareName string, licenseYear string) toBeCleaned {
 	// define system variables
 	winAppData := os.Getenv("APPDATA") + "\\"
 	winLocalAppData := os.Getenv("LOCALAPPDATA") + "\\"
@@ -37,7 +37,7 @@ func generateConfig(softwareName string, licenseYear string) softwareConfig {
 			winLocalAppData + "vectorworks-updater-updater",
 			winLocalAppData + "Nemetschek",
 		}
-		return softwareConfig{
+		return toBeCleaned{
 			license:     license,
 			registry:    registry,
 			directories: directories,
@@ -54,7 +54,7 @@ func generateConfig(softwareName string, licenseYear string) softwareConfig {
 			filepath.Join(winLocalAppData, "VisionUpdater"),
 
 		}
-		return softwareConfig{
+		return toBeCleaned{
 			license: license,
 			registry: registry,
 			directories: directories,
@@ -65,13 +65,13 @@ func generateConfig(softwareName string, licenseYear string) softwareConfig {
 			winAppData + "vectorworks-cloud-services",
 			winLocalAppData + "vectorworks-cloud-services-beta-updater",
 		}
-		return softwareConfig{
+		return toBeCleaned{
 			vcs: vcs,
 		}
 	}
 
 	// Should be unreachable
-	return softwareConfig{}
+	return toBeCleaned{}
 }
 
 // convertYearToVersion returns a version number as opposed to a version year.
