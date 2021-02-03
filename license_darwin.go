@@ -58,6 +58,8 @@ func getSerialLocation(softwareName string, appYear string) string {
 	return licenseLocation
 }
 
+
+// getSerial will read in a plist, decode it and return a keyed value as a string value
 func getSerial(softwareName string, appYear string) string {
 	// Determine what software is requested.
 	licenseLocation := getSerialLocation(softwareName, appYear)
@@ -76,6 +78,7 @@ func getSerial(softwareName string, appYear string) string {
 	return plistData.serial[`NNA User License`]
 }
 
+// replaceOldSerial
 func replaceOldSerial(softwareName string, appYear string, newSerial string) {
 	licenseLocation := getSerialLocation(softwareName, appYear)
 	plistFile, err := os.Open(licenseLocation)
