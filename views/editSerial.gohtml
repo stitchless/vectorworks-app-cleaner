@@ -36,14 +36,25 @@
                                                 <td style="padding-top: 8px; padding-bottom: 4px">
                                                     <div class="d-inline-flex col-8">
                                                         <div class="input-group input-group-sm mb-1">
-                                                            <input type="text" class="form-control"
+                                                            <input type="text" name="serial" form="newLicense" class="form-control"
                                                                    placeholder="{{.Serial}}">
-                                                            <button type="submit" class="btn btn-outline-success">
+                                                            <button type="submit" form="newLicense" class="btn btn-outline-success">
                                                                 <span><i class="fas fa-check"></i></span>
                                                             </button>
-                                                            <button type="submit" class="btn btn-outline-secondary">
+                                                            <form action="/updateSerial" id="newLicense" method="post">
+                                                                <input type="hidden" name="softwareName"
+                                                                       value="{{$softwareName}}">
+                                                                <input type="hidden" name="appYear" value="{{.Year}}">
+                                                            </form>
+                                                            <button type="submit" form="cancelEdit" class="btn btn-outline-secondary">
                                                                 <span><i class="fas fa-times"></i></span>
                                                             </button>
+                                                            <form action="/updateSerial" id="cancelEdit" method="post">
+                                                                <input type="hidden" name="softwareName"
+                                                                       value="{{$softwareName}}">
+                                                                <input type="hidden" name="appYear" value="{{.Year}}">
+                                                                <input type="hidden" name="serial" value="{{.Serial}}">
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -51,8 +62,7 @@
                                                 <td>
                                                     {{.Serial}}
                                                     <div class="d-inline-flex">
-                                                        <i class="fas fa-edit mr-3" data-toggle="modal"
-                                                           data-placement="top"
+                                                        <i class="fas fa-edit mr-3" data-placement="top"
                                                            title="Edit Serial" data-target="#modal-form"></i>
                                                         <form action="/editSerial" method="post">
                                                             <input type="hidden" name="softwareName"
