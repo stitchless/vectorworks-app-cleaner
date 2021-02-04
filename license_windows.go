@@ -50,16 +50,20 @@ func fetchAppInfo(softwareName string) []Version {
 	return versions
 }
 
-// getSerial will search the registry for any valid serials.
-func getSerial(softwareName string, appYear string) string {
+func getSerialLocation(softwareName string, appYear string) string {
 	var licenseLocation string
-
 	appVersion := convertYearToVersion(appYear)
 	if softwareName == "Vectorworks" {
 		licenseLocation = "SOFTWARE\\Nemetschek\\Vectorworks " + appVersion + "\\Registration"
 	} else {
 		licenseLocation = "SOFTWARE\\VectorWorks\\Vision " + appYear + "\\Registration"
 	}
+	return licenseLocation
+}
+
+// getSerial will search the registry for any valid serials.
+func getSerial(softwareName string, appYear string) string {
+	licenseLocation := getSerialLocation(softwareName, appYear)
 
 	// Get the Registry Key
 	key, _ := registry.OpenKey(registry.CURRENT_USER, licenseLocation, registry.QUERY_VALUE)
@@ -91,32 +95,24 @@ func convertYearToVersion(appYear string) string {
 	return appVersion
 }
 
-//func inputNewSerial(serial string) string {
-//	newSerial, _, err := dlgs.Entry("Input New Serial", "Please input a new Series E Serial:", serial)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//	return newSerial
-//}
-//
-//
-//
-//func replaceOldSerial(newSerial string, config toBeCleaned) {
-//	// TODO: Clean the input before replacing.
-//	key, err := registry.OpenKey(registry.CURRENT_USER, config.license, registry.SET_VALUE)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//
-//	defer func() {
-//		err = key.Close()
-//		if err != nil {
-//			log.Fatal(err)
-//		}
-//	}()
-//
-//	err = key.SetStringValue("User Serial Number", newSerial)
-//	if err != nil {
-//		log.Fatal(err)
-//	}
-//}
+func replaceOldSerial(softwareName string, appYear string, newSerial string) {
+	licenseLocation := getSerialLocation(softwareName, appYear)
+
+	// TODO: Clean the input before replacing.
+	key, err := registry.OpenKey(registry.CURRENT_USER, licenseLocation, registry.SET_VALUE)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer func() {
+		err = key.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	err = key.SetStringValue("User Serial Number", newSerial)
+	if err != nil {
+		log.Fatal(err)
+	}
+}

@@ -131,8 +131,9 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	check(err)
 }
 
-// TODO: Separate views based on license type or localizations via Tabs
+// TODO: Show localizations via Tabs
 // TODO: Show Actions as Modals?
+// TODO: Illustrate license types (Private Repo)
 
 func editSerialHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
