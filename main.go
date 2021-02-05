@@ -6,12 +6,14 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
 )
 
 // Globals
 var homeDir, _ = os.UserHomeDir()
 var dir string
 var tmpl *template.Template
+var showPreloader sync.Once
 
 type htmlValues struct {
 	Title       string
@@ -104,4 +106,11 @@ func check(e error) {
 	if e != nil {
 		panic(e)
 	}
+}
+
+// Sets the Preloader variable
+func showPreloader() {
+	showPreloader.Do(func() {
+		Preloader
+	})
 }
