@@ -96,7 +96,7 @@ func replaceOldSerial(softwareName string, appYear string, newSerial string) {
 	err = encoder.Encode(plistData.serial)
 	check(err)
 
-	err = ioutil.WriteFile(licenseLocation, buffer.Bytes(), 0644)
+	err = os.WriteFile(licenseLocation, buffer.Bytes(), 0644)
 	check(err)
 
 	w := bufio.NewWriter(buffer)

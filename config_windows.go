@@ -7,7 +7,7 @@ import (
 
 // generateConfig generates a series of locations and fill in missing information with teh version
 // year then returns them as a slice.
-func generateConfig(softwareName string, licenseYear string) toBeCleaned {
+func generateConfig(softwareName string, licenseYear string) softwareStrings {
 	var properties []string
 	var directories []string
 	// define system variables
@@ -52,7 +52,7 @@ func generateConfig(softwareName string, licenseYear string) toBeCleaned {
 			winLocalAppData + "vectorworks-cloud-services-beta-updater",
 		}
 	}
-	return toBeCleaned{
+	return softwareStrings{
 		Properties:  properties,
 		Directories: directories,
 	}

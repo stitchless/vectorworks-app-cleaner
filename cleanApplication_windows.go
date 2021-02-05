@@ -5,7 +5,7 @@ package main
 //	"os"
 //)
 //
-//func cleanApplication(config toBeCleaned) {
+//func cleanApplication(config softwareStrings) {
 //	// Deletes relevant registry entries for select software/version
 //	for _, property := range config.registry {
 //		k, _ := registry.OpenKey(registry.CURRENT_USER, property, registry.ALL_ACCESS)
@@ -27,7 +27,7 @@ package main
 //	}
 //}
 //
-//func cleanVCS(config toBeCleaned) {
+//func cleanVCS(config softwareStrings) {
 //	for _, directory := range config.vcs {
 //		_ = os.RemoveAll(directory)
 //	}

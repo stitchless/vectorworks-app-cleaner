@@ -16,7 +16,7 @@ import (
 func fetchAppInfo(softwareName string) []Version {
 	var appYears []string
 	var versions []Version
-	configs := map[string]toBeCleaned{}
+	configs := map[string]softwareStrings{}
 	re := regexp.MustCompile("[0-9]+")
 	var softwareFolder string
 
@@ -50,6 +50,7 @@ func fetchAppInfo(softwareName string) []Version {
 	return versions
 }
 
+// getSerialLocation returns the registry location of the software license
 func getSerialLocation(softwareName string, appYear string) string {
 	var licenseLocation string
 	appVersion := convertYearToVersion(appYear)
@@ -95,6 +96,7 @@ func convertYearToVersion(appYear string) string {
 	return appVersion
 }
 
+// replaceOldSerial
 func replaceOldSerial(softwareName string, appYear string, newSerial string) {
 	licenseLocation := getSerialLocation(softwareName, appYear)
 

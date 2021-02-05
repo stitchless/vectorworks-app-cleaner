@@ -1,6 +1,9 @@
 package main
 
-func generateConfig(softwareName string, licenseYear string) toBeCleaned {
+// generateConfig will create a series of strings used to clean software.
+// This will be a mixture of plist files, and directories that will be deleted
+// Anything that's removed from here will be done without user confirmation so use with caution
+func generateConfig(softwareName string, licenseYear string) softwareStrings {
 	var properties[]string
 	var directories []string
 	switch softwareName {
@@ -53,7 +56,7 @@ func generateConfig(softwareName string, licenseYear string) toBeCleaned {
 		}
 	case "VCS":
 	}
-	return toBeCleaned{
+	return softwareStrings{
 		Properties: properties,
 		Directories: directories,
 	}

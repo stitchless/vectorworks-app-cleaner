@@ -37,7 +37,7 @@ type Version struct {
 }
 
 // software Information
-type toBeCleaned struct {
+type softwareStrings struct {
 	Properties  []string
 	Directories []string
 }
@@ -85,9 +85,9 @@ func webApp() {
 	mux := http.NewServeMux()
 	// Routes
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(dir+"/static"))))
-	mux.HandleFunc("/", homePageHandler)                 // Also catch all
-	mux.HandleFunc("/editSerial", editSerialHandler)     // Also catch all
-	mux.HandleFunc("/updateSerial", updateSerialHandler) // Also catch all
+	mux.HandleFunc("/", homePageHandler)                 // Handle home page, also catch all
+	mux.HandleFunc("/editSerial", editSerialHandler)
+	mux.HandleFunc("/updateSerial", updateSerialHandler)
 
 	// Configure the webserver
 	webServer := &http.Server{

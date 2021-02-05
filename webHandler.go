@@ -1,15 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 )
 
-// TODO: Get Vectorworks Info [Done]
-// TODO: Get Vision Info [WIP]
 // TODO: Determine if VCS is installed
 
 // homePageHandler is the initial page with all software information held on it.
+// Each time an action is done the user is returned to this screen
 // From this screen you can edit license info or clean up application data.
 func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	vectorworksVersions := fetchAppInfo("Vectorworks")
@@ -33,6 +31,7 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 // TODO: Show Actions as Modals?
 // TODO: Illustrate license types (Private Repo)
 
+// editSerialHandler The screen to chose the user a text field to update a selected serial number
 func editSerialHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	var softwareName string
@@ -62,6 +61,7 @@ func editSerialHandler(w http.ResponseWriter, r *http.Request) {
 	vectorworksVersions := fetchAppInfo("Vectorworks")
 	visVersions := fetchAppInfo("Vision")
 
+	// Serve the screen
 	templateValues := htmlValues{
 		Preloader:   false,
 		Title:       "Welcome to the Vectorworks Utility Tool!",
@@ -77,13 +77,14 @@ func editSerialHandler(w http.ResponseWriter, r *http.Request) {
 	check(err)
 }
 
+// updateSerialHandler will send the filled in text field and update the serial
+// Once updated, the home homePageHandler is called and the home screen is shown
 func updateSerialHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	var softwareName string
 	var appYear string
 	var serial string
 
-	fmt.Println(r.Form)
 	for key, value := range r.Form {
 		switch key {
 		case "softwareName":

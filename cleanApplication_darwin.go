@@ -4,7 +4,7 @@ package main
 //	"os"
 //)
 //
-//func cleanApplication(config toBeCleaned) {
+//func cleanApplication(config softwareStrings) {
 //	plistPath := homeDir + "/Library/Preferences/"
 //	// Deletes relevant plist files for select software/version
 //	for _, plist := range config.plist {
@@ -19,7 +19,7 @@ package main
 //	}
 //}
 //
-//func cleanVCS(config toBeCleaned) {
+//func cleanVCS(config softwareStrings) {
 //	for _, directory := range config.vcs {
 //		_ = os.RemoveAll(directory)
 //	}
