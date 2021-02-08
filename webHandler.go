@@ -10,11 +10,12 @@ import (
 // Each time an action is done the user is returned to this screen
 // From this screen you can edit license info or clean up application data.
 func homePageHandler(w http.ResponseWriter, r *http.Request) {
+	showPreloader()
 	vectorworksVersions := fetchAppInfo("Vectorworks")
 	visVersions := fetchAppInfo("Vision")
 
 	templateValues := htmlValues{
-		Preloader:   true,
+		Preloader:   preloader,
 		Title:       "Welcome to the Vectorworks Utility Tool",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
 		Software: []Software{
@@ -33,6 +34,7 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 
 // editSerialHandler The screen to chose the user a text field to update a selected serial number
 func editSerialHandler(w http.ResponseWriter, r *http.Request) {
+	showPreloader()
 	r.ParseForm()
 	var softwareName string
 	var appYear string
@@ -63,7 +65,7 @@ func editSerialHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Serve the screen
 	templateValues := htmlValues{
-		Preloader:   false,
+		Preloader:   preloader,
 		Title:       "Welcome to the Vectorworks Utility Tool!",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
 		Software: []Software{
@@ -80,6 +82,7 @@ func editSerialHandler(w http.ResponseWriter, r *http.Request) {
 // updateSerialHandler will send the filled in text field and update the serial
 // Once updated, the home homePageHandler is called and the home screen is shown
 func updateSerialHandler(w http.ResponseWriter, r *http.Request) {
+	showPreloader()
 	r.ParseForm()
 	var softwareName string
 	var appYear string
@@ -111,7 +114,7 @@ func updateSerialHandler(w http.ResponseWriter, r *http.Request) {
 	visVersions := fetchAppInfo("Vision")
 
 	templateValues := htmlValues{
-		Preloader:   false,
+		Preloader:   preloader,
 		Title:       "Welcome to the Vectorworks Utility Tool!",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
 		Software: []Software{

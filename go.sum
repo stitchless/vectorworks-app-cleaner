@@ -2,8 +2,6 @@ github.com/jessevdk/go-flags v1.4.0/go.mod h1:4FA24M0QyGHXBuZZK/XkWh8h0e1EYbRYJS
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
-github.com/webview/webview v0.0.0-20210127101420-7534ef6e476a h1:0cw6EqvTgdPYfso3sV88NbJxlFJJrKPUkYlnWdt3g+s=
-github.com/webview/webview v0.0.0-20210127101420-7534ef6e476a/go.mod h1:rpXAuuHgyEJb6kXcXldlkOjU6y4x+YcASKKXJNUhh0Y=
 github.com/webview/webview v0.0.0-20210201104136-ce27be3bc811 h1:JxTlIhZJh9+B4H74fkixRj9sFf4v4bI67YrWjrsbz0A=
 github.com/webview/webview v0.0.0-20210201104136-ce27be3bc811/go.mod h1:rpXAuuHgyEJb6kXcXldlkOjU6y4x+YcASKKXJNUhh0Y=
 golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c h1:VwygUrnw9jn88c4u8GD3rZQbqrP/tgas88tPUbBxQrk=

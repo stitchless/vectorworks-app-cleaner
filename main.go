@@ -13,7 +13,8 @@ import (
 var homeDir, _ = os.UserHomeDir()
 var dir string
 var tmpl *template.Template
-var showPreloader sync.Once
+var doOnce sync.Once
+var preloader bool
 
 type htmlValues struct {
 	Title       string
@@ -110,7 +111,8 @@ func check(e error) {
 
 // Sets the Preloader variable
 func showPreloader() {
-	showPreloader.Do(func() {
-		Preloader
+	doOnce.Do(func() {
+		preloader = true
 	})
+	preloader = false
 }
