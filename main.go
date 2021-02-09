@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"github.com/webview/webview"
 	"html/template"
 	"log"
@@ -54,7 +55,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// funcMap needed in order to define custom functions within go templates
+	// funcMap needed in order to define custom functions within go template
 	funcMap := template.FuncMap{
 		// Increments int by 1 (Used to illustrate table views)
 		"inc": func(i int) int {
@@ -68,7 +69,7 @@ func main() {
 		},
 	}
 
-	tmpl = template.Must(template.ParseGlob(dir + "/templates/*.html.tmpl")).Funcs(funcMap)
+	tmpl = template.Must(template.ParseGlob(dir + "/template/*.html.tmpl")).Funcs(funcMap)
 	template.Must(tmpl.ParseGlob(dir + "/views/*.html.tmpl")).Funcs(funcMap)
 
 	go webApp()
@@ -88,7 +89,7 @@ func webApp() {
 	mux := http.NewServeMux()
 	// Routes
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(dir+"/static"))))
-	mux.HandleFunc("/", homePageHandler)                 // Handle home page, also catch all
+	mux.HandleFunc("/", homePageHandler) // Handle home page, also catch all
 	mux.HandleFunc("/editSerial", editSerialHandler)
 	mux.HandleFunc("/updateSerial", updateSerialHandler)
 
