@@ -9,7 +9,7 @@ import (
 // homePageHandler is the initial page with all software information held on it.
 // Each time an action is done the user is returned to this screen
 // From this screen you can edit license info or clean up application data.
-func homePageHandler(w http.ResponseWriter, r *http.Request) {
+func homePageHandler(w http.ResponseWriter, _ *http.Request) {
 	showPreloader()
 	vectorworksVersions := fetchAppInfo("Vectorworks")
 	visVersions := fetchAppInfo("Vision")
@@ -35,7 +35,8 @@ func homePageHandler(w http.ResponseWriter, r *http.Request) {
 // editSerialHandler The screen to chose the user a text field to update a selected serial number
 func editSerialHandler(w http.ResponseWriter, r *http.Request) {
 	showPreloader()
-	r.ParseForm()
+	err := r.ParseForm()
+	check(err)
 	var softwareName string
 	var appYear string
 	var serial string
@@ -75,7 +76,7 @@ func editSerialHandler(w http.ResponseWriter, r *http.Request) {
 		FormData: formData,
 	}
 
-	err := tmpl.ExecuteTemplate(w, "editSerial", templateValues)
+	err = tmpl.ExecuteTemplate(w, "editSerial", templateValues)
 	check(err)
 }
 
@@ -83,7 +84,8 @@ func editSerialHandler(w http.ResponseWriter, r *http.Request) {
 // Once updated, the home homePageHandler is called and the home screen is shown
 func updateSerialHandler(w http.ResponseWriter, r *http.Request) {
 	showPreloader()
-	r.ParseForm()
+	err := r.ParseForm()
+	check(err)
 	var softwareName string
 	var appYear string
 	var serial string
@@ -124,6 +126,6 @@ func updateSerialHandler(w http.ResponseWriter, r *http.Request) {
 		FormData: formData,
 	}
 
-	err := tmpl.ExecuteTemplate(w, "homePage", templateValues)
+	err = tmpl.ExecuteTemplate(w, "homePage", templateValues)
 	check(err)
 }
