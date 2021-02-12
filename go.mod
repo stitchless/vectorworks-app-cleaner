@@ -1,4 +1,4 @@
-module vectorworks-app-cleaner
+module main
 
 go 1.16
 
