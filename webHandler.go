@@ -29,7 +29,7 @@ func homePageHandler(w http.ResponseWriter, _ *http.Request) {
 }
 
 // TODO: Show localizations via Tabs
-// TODO: Show Actions as Modals?
+// TODO: Show Actions as Modals? (No)
 // TODO: Illustrate license types (Private Repo)
 
 // editSerialHandler The screen to chose the user a text field to update a selected serial number

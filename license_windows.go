@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"golang.org/x/sys/windows/registry"
 	"io/ioutil"
 	"log"
@@ -99,8 +100,8 @@ func convertYearToVersion(appYear string) string {
 // replaceOldSerial
 func replaceOldSerial(softwareName string, appYear string, newSerial string) {
 	licenseLocation := getSerialLocation(softwareName, appYear)
+	newSerial = cleanSerial(newSerial)
 
-	// TODO: Clean the input before replacing.
 	key, err := registry.OpenKey(registry.CURRENT_USER, licenseLocation, registry.SET_VALUE)
 	if err != nil {
 		log.Fatal(err)
@@ -117,4 +118,14 @@ func replaceOldSerial(softwareName string, appYear string, newSerial string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func cleanSerial(serial string) string {
+	// TODO: Clear empty space (Done)
+	// TODO: REGEX confirmation
+	// TODO: Return error and cancel replacement
+	r := regexp.MustCompile(`(.{6})-(.{6})-(.{6})-(.{6})`)
+	serial = strings.TrimSpace(serial)
+	parseSerial := r.FindAllString(serial, -1)
+	fmt.Fprintln(parseSerial[0])
 }
