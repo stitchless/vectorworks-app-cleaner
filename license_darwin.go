@@ -58,7 +58,6 @@ func getSerialLocation(softwareName string, appYear string) string {
 	return licenseLocation
 }
 
-
 // getSerial will read in a plist, decode it and return a keyed value as a string value
 func getSerial(softwareName string, appYear string) string {
 	// Determine what software is requested.
@@ -84,6 +83,8 @@ func replaceOldSerial(softwareName string, appYear string, newSerial string) {
 	plistFile, err := os.Open(licenseLocation)
 	check(err)
 	err = plistFile.Truncate(0)
+
+	newSerial = cleanSerial(newSerial) // Clean and verify serial
 
 	plistData := &LicenseOpts{
 		serial: map[string]string{"NNA User License": newSerial},
@@ -128,4 +129,16 @@ func refreshPList() {
 	if err = cmd.Wait(); err != nil {
 		log.Fatal(err)
 	}
+}
+
+// cleanSerial will take in a string, remove any empty strings
+// and confirm a regex pattern.  If regex is valid the string is returned.
+func cleanSerial(serial string) string {
+	r := regexp.MustCompile(`(.{6})-(.{6})-(.{6})-(.{6})`)
+	parseSerial := r.FindAllString(serial, -1)
+	if len(parseSerial) != 0 {
+		return parseSerial[0]
+		// TODO: REFER TO THIS WHEN PARSING OUT LICENSE MEANING!
+	}
+	panic("ERROR: REPLACE THIS WITH A TOAST SHOWING INVALID INPUT!")
 }
