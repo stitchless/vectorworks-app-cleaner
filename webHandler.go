@@ -2,26 +2,25 @@ package main
 
 import (
 	"net/http"
+	"sync"
 )
 
 // TODO: Determine if VCS is installed
+
+var doOnce sync.Once
+var preloader bool
 
 // homePageHandler is the initial page with all software information held on it.
 // Each time an action is done the user is returned to this screen
 // From this screen you can edit license info or clean up application data.
 func homePageHandler(w http.ResponseWriter, _ *http.Request) {
 	showPreloader()
-	vectorworksVersions := fetchAppInfo("Vectorworks")
-	visVersions := fetchAppInfo("Vision")
 
 	templateValues := htmlValues{
 		Preloader:   preloader,
 		Title:       "Welcome to the Vectorworks Utility Tool",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
-		Software: []Software{
-			{Name: "Vectorworks", Versions: vectorworksVersions},
-			{Name: "Vision", Versions: visVersions},
-		},
+		Softwares: allSoftwares,
 	}
 
 	err := tmpl.ExecuteTemplate(w, "homePage", templateValues)
@@ -52,28 +51,17 @@ func editSerialHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	//var formData string
-	formData := FormData{
-		Name: softwareName,
-		Version: Version{
-			Year:   appYear,
-			Serial: serial,
-		},
-	}
-
-	vectorworksVersions := fetchAppInfo("Vectorworks")
-	visVersions := fetchAppInfo("Vision")
-
 	// Serve the screen
 	templateValues := htmlValues{
 		Preloader:   preloader,
 		Title:       "Welcome to the Vectorworks Utility Tool!",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
-		Software: []Software{
-			{Name: "Vectorworks", Versions: vectorworksVersions},
-			{Name: "Vision", Versions: visVersions},
+		Softwares: allSoftwares,
+		FormData: FormData{
+			Name: softwareName,
+			Year:   appYear,
+			Serial: serial,
 		},
-		FormData: formData,
 	}
 
 	err = tmpl.ExecuteTemplate(w, "editSerial", templateValues)
@@ -101,31 +89,33 @@ func updateSerialHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	replaceOldSerial(softwareName, appYear, serial)
-
-	//var formData string
-	formData := FormData{
-		Name: softwareName,
-		Version: Version{
-			Year:   appYear,
-			Serial: serial,
-		},
+	installation := Installation{
+		Software:    softwareName,
+		Year:        appYear,
 	}
 
-	vectorworksVersions := fetchAppInfo("Vectorworks")
-	visVersions := fetchAppInfo("Vision")
+	replaceOldSerial(installation, serial)
 
 	templateValues := htmlValues{
 		Preloader:   preloader,
 		Title:       "Welcome to the Vectorworks Utility Tool!",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
-		Software: []Software{
-			{Name: "Vectorworks", Versions: vectorworksVersions},
-			{Name: "Vision", Versions: visVersions},
+		Softwares: allSoftwares,
+		FormData: FormData{
+			Name: softwareName,
+			Year:   appYear,
+			Serial: serial,
 		},
-		FormData: formData,
 	}
 
 	err = tmpl.ExecuteTemplate(w, "homePage", templateValues)
 	check(err)
+}
+
+// Sets the Preloader variable
+func showPreloader() {
+	doOnce.Do(func() {
+		preloader = true
+	})
+	preloader = false
 }

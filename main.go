@@ -7,7 +7,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"sync"
 )
 
 // EMBEDS
@@ -19,36 +18,19 @@ var content embed.FS
 var homeDir, _ = os.UserHomeDir()
 var dir string
 var tmpl *template.Template
-var doOnce sync.Once
-var preloader bool
 
 type htmlValues struct {
 	Title       string
 	Preloader   bool
 	Description string
-	Software    []Software
+	Softwares []Software
 	FormData    FormData
 }
 
 type FormData struct {
 	Name    string
-	Version Version
-}
-
-type Software struct {
-	Name     string
-	Versions []Version
-}
-
-type Version struct {
 	Year   string
 	Serial string
-}
-
-// software Information
-type softwareStrings struct {
-	Properties  []string
-	Directories []string
 }
 
 // Set up and run the webview.
@@ -72,12 +54,13 @@ func main() {
 			}
 			return false
 		},
+		"FindInstallationsBySoftware": FindInstallationsBySoftware,
 	}
 
 	tmpl = template.Must(template.ParseGlob(dir + "/templates/*.html.tmpl")).Funcs(funcMap)
 	template.Must(tmpl.ParseGlob(dir + "/views/*.html.tmpl")).Funcs(funcMap)
 
-	go webApp()
+	go runWebserver()
 
 	// Set up Webview
 	w := webview.New(true)
@@ -88,9 +71,9 @@ func main() {
 	w.Run()
 }
 
-// webApp Creates all Mux objects, Handlers, configures the web server and
+// Creates all Mux objects, Handlers, configures the web server and
 // deploys the http server on http://127.0.0.1:12346
-func webApp() {
+func runWebserver() {
 	mux := http.NewServeMux()
 	// Routes
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(dir+"/static"))))
@@ -106,19 +89,4 @@ func webApp() {
 	//Start the web server
 	err := webServer.ListenAndServe()
 	check(err)
-}
-
-// Error Checking
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
-// Sets the Preloader variable
-func showPreloader() {
-	doOnce.Do(func() {
-		preloader = true
-	})
-	preloader = false
 }

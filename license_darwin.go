@@ -1,67 +1,18 @@
 package main
 
-import (
-	"bufio"
-	"bytes"
-	"fmt"
-	"howett.net/plist"
-	"io/ioutil"
-	"log"
-	"os"
-	"os/exec"
-	"regexp"
-	"strings"
-)
-
 type LicenseOpts struct {
 	serial map[string]string `plist:"NNA User License"`
 }
 
-func fetchAppInfo(softwareName string) []Version {
-	var appYears []string
-	var versions []Version
-	re := regexp.MustCompile("[0-9]+")
-
-	files, err := ioutil.ReadDir(homeDir + "/Library/Preferences") // gets list of all plist file names
-	check(err)
-
-	// returns all license year numbers found in plist file names from the files variable
-	for _, f := range files {
-		file := strings.Contains(f.Name(), strings.ToLower(softwareName+".license."))
-		if file {
-			appYear := re.FindString(f.Name())
-			if appYear != "" {
-				appYears = append(appYears, appYear)
-			}
-		}
-	}
-
-	if len(appYears) == 0 {
-		return nil
-	}
-
-	for _, year := range appYears {
-		version := Version{Year: year, Serial: getSerial(softwareName, year)}
-		versions = append(versions, version)
-	}
-
-	return versions
-}
-
-func getSerialLocation(softwareName string, appYear string) string {
-	var licenseLocation string
-	if softwareName == "Vectorworks" {
-		licenseLocation = homeDir + "/Library/Preferences/net.nemetschek.vectorworks.license." + appYear + ".plist"
-	} else {
-		licenseLocation = homeDir + "/Library/Preferences/net.vectorworks.vision.license." + appYear + ".plist"
-	}
-	return licenseLocation
-}
-
 // getSerial will read in a plist, decode it and return a keyed value as a string value
-func getSerial(softwareName string, appYear string) string {
-	// Determine what software is requested.
-	licenseLocation := getSerialLocation(softwareName, appYear)
+func getSerial(installation Installation) string {
+	var licenseLocation string
+	switch installation.Software {
+	case SoftwareVectorworks:
+		licenseLocation = homeDir + "/Library/Preferences/net.nemetschek.vectorworks.license." + installation.Year + ".plist"
+	case SoftwareVision:
+		licenseLocation = homeDir + "/Library/Preferences/net.vectorworks.vision.license." + installation.Year + ".plist"
+	}
 
 	// Read in plist
 	plistFile, err := ioutil.ReadFile(licenseLocation)

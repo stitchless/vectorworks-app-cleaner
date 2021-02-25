@@ -9,20 +9,24 @@
                     </div>
                     {{ $formData := .FormData }}
                     <div class="card-body pt-2 px-0">
-                        {{ range .Software }}
-                            {{ $softwareName := .Name }}
-                            <h5>{{.Name}}</h5>
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Version</th>
-                                    <th scope="col">License</th>
-                                    <th class="text-center" scope="col">Actions</th>
-                                </tr>
-                                </thead>
-                                {{ range $index , $element := .Versions }}
-                                    {{if .Year}}
+                        {{ range $i, $softwareName := .Softwares }}
+                            {{ $installations := FindInstallationsBySoftware $softwareName }}
+
+                            {{ if eq (len $installations) 0 }}
+                                <!-- Don't event show the table when there are no installations -->
+                            {{ else }}
+                                <h5>{{ $softwareName }}</h5>
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Version</th>
+                                        <th scope="col">License</th>
+                                        <th class="text-center" scope="col">Actions</th>
+                                    </tr>
+                                    </thead>
+
+                                    {{ range $index , $element := $installations }}
                                         <tbody>
                                         <tr>
                                             <th scope="row">{{inc $index}}</th>
@@ -32,13 +36,13 @@
                                                 </div>
                                             </td>
 
-                                            {{if (and (eq $formData.Name $softwareName) (eq $formData.Version.Year .Year) (eq $formData.Version.Serial .Serial))}}
+                                            {{if (and (eq $formData.Name $softwareName) (eq $formData.Year .Year) (eq $formData.Serial .License.Serial))}}
                                                 <td style="padding-top: 8px; padding-bottom: 4px">
                                                     <div class="d-inline-flex col-8">
                                                         <div class="input-group input-group-sm mb-1">
                                                             <input type="text" name="serial" form="newLicense"
                                                                    class="form-control" id="serial"
-                                                                   placeholder="{{.Serial}}">
+                                                                   placeholder="{{.License.Serial}}">
                                                             <button type="submit" form="newLicense"
                                                                     class="btn btn-outline-success">
                                                                 <span><i class="fas fa-check"></i></span>
@@ -56,14 +60,14 @@
                                                                 <input type="hidden" name="softwareName"
                                                                        value="{{$softwareName}}">
                                                                 <input type="hidden" name="appYear" value="{{.Year}}">
-                                                                <input type="hidden" name="serial" value="{{.Serial}}">
+                                                                <input type="hidden" name="serial" value="{{.License.Serial}}">
                                                             </form>
                                                         </div>
                                                     </div>
                                                 </td>
                                             {{else}}
                                                 <td>
-                                                    {{.Serial}}
+                                                    {{.License.Serial}}
                                                     <div class="d-inline-flex">
                                                         <i class="fas fa-edit mr-3" data-placement="top"
                                                            title="Edit Serial" data-target="#modal-form"></i>
@@ -71,7 +75,7 @@
                                                             <input type="hidden" name="softwareName"
                                                                    value="{{$softwareName}}">
                                                             <input type="hidden" name="appYear" value="{{.Year}}">
-                                                            <input type="hidden" name="serial" value="{{.Serial}}">
+                                                            <input type="hidden" name="serial" value="{{.License.Serial}}">
                                                         </form>
                                                     </div>
                                                 </td>
@@ -83,11 +87,9 @@
                                             </td>
                                         </tr>
                                         </tbody>
-                                    {{ else }}
-                                        <div class="">No licenses were found for this software...</div>
                                     {{end}}
-                                {{end}}
-                            </table>
+                                </table>
+                            {{end}}
                         {{end}}
                     </div>
                 </div>
