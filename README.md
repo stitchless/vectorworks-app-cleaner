@@ -14,3 +14,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 required dlls: `webview.dll` `WebView2Loader.dll`
 
 Build: `go build -ldflags="-H windowsgui" -o webview-example.exe`
+
+Windows ENV needs this to run 
+CheckNetIsolation.exe LoopbackExempt -a -n="Microsoft.Win32WebViewHost_cw5n1h2txyewy"

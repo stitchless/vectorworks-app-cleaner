@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "embed"
+	"embed"
 	"github.com/webview/webview"
 	"html/template"
 	"log"
@@ -9,6 +9,11 @@ import (
 	"os"
 	"sync"
 )
+
+// EMBEDS
+//go:embed webview.dll WebView2Loader.dll
+//go:embed templates/* static/* views/*
+var content embed.FS
 
 // Globals
 var homeDir, _ = os.UserHomeDir()
@@ -55,7 +60,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// funcMap needed in order to define custom functions within go template
+	// funcMap needed in order to define custom functions within go templates
 	funcMap := template.FuncMap{
 		// Increments int by 1 (Used to illustrate table views)
 		"inc": func(i int) int {
@@ -69,7 +74,7 @@ func main() {
 		},
 	}
 
-	tmpl = template.Must(template.ParseGlob(dir + "/template/*.html.tmpl")).Funcs(funcMap)
+	tmpl = template.Must(template.ParseGlob(dir + "/templates/*.html.tmpl")).Funcs(funcMap)
 	template.Must(tmpl.ParseGlob(dir + "/views/*.html.tmpl")).Funcs(funcMap)
 
 	go webApp()
