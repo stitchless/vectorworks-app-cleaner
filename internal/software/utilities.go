@@ -22,3 +22,14 @@ func GetWD() string {
 	}
 	return dir
 }
+
+// Define users home directory
+func GetHomeDir() string {
+	var err error
+	var dir string
+	dir, err = os.UserHomeDir()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return dir
+}

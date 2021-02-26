@@ -1,38 +1,55 @@
 package software
 
+import (
+	"bufio"
+	"bytes"
+	"fmt"
+	"howett.net/plist"
+	"io/ioutil"
+	"log"
+	"os"
+	"os/exec"
+	"regexp"
+)
+
 type LicenseOpts struct {
 	serial map[string]string `plist:"NNA User License"`
 }
 
-// getSerial will read in a plist, decode it and return a keyed value as a string value
-func getSerial(installation Installation) string {
-	var licenseLocation string
+func GetSerialLocation(installation Installation) string {
 	switch installation.Software {
 	case SoftwareVectorworks:
-		licenseLocation = homeDir + "/Library/Preferences/net.nemetschek.vectorworks.license." + installation.Year + ".plist"
+		return GetHomeDir() + "/Library/Preferences/net.nemetschek.vectorworks.license." + installation.Year + ".plist"
 	case SoftwareVision:
-		licenseLocation = homeDir + "/Library/Preferences/net.vectorworks.vision.license." + installation.Year + ".plist"
+		return GetHomeDir() + "/Library/Preferences/net.vectorworks.vision.license." + installation.Year + ".plist"
 	}
 
+	return ""
+}
+
+// getSerial will read in a plist, decode it and return a keyed value as a string value
+func getSerial(installation Installation) string {
+	serialLocation := GetSerialLocation(installation)
+
 	// Read in plist
-	plistFile, err := ioutil.ReadFile(licenseLocation)
+	plistFile, err := ioutil.ReadFile(serialLocation)
 	buffer := bytes.NewReader(plistFile)
-	check(err)
+	Check(err)
 
 	// parse and return plist serial
 	var plistData LicenseOpts
 	decoder := plist.NewDecoder(buffer)
 	err = decoder.Decode(&plistData.serial)
-	check(err)
+	Check(err)
 
 	return plistData.serial[`NNA User License`]
 }
 
 // replaceOldSerial
-func replaceOldSerial(softwareName string, appYear string, newSerial string) {
-	licenseLocation := getSerialLocation(softwareName, appYear)
+func replaceOldSerial(installation Installation, newSerial string) {
+	licenseLocation := GetSerialLocation(installation)
 	plistFile, err := os.Open(licenseLocation)
-	check(err)
+	Check(err)
 	err = plistFile.Truncate(0)
 
 	newSerial = cleanSerial(newSerial) // Clean and verify serial
@@ -46,18 +63,18 @@ func replaceOldSerial(softwareName string, appYear string, newSerial string) {
 	encoder := plist.NewEncoder(buffer)
 
 	err = encoder.Encode(plistData.serial)
-	check(err)
+	Check(err)
 
 	err = os.WriteFile(licenseLocation, buffer.Bytes(), 0644)
-	check(err)
+	Check(err)
 
 	w := bufio.NewWriter(buffer)
 	n4, err := w.WriteString("buffered\n")
-	check(err)
+	Check(err)
 	fmt.Printf("wrote %d bytes\n", n4)
 
 	err = w.Flush()
-	check(err)
+	Check(err)
 
 	refreshPList()
 }
@@ -68,7 +85,7 @@ func refreshPList() {
 	cmd := exec.Command(`osascript`, "-s", "h", "-e", `do shell script "sudo killall -u $USER cfprefsd" with administrator privileges`)
 	stderr, err := cmd.StderrPipe()
 	log.SetOutput(os.Stderr)
-	check(err)
+	Check(err)
 
 	if err = cmd.Start(); err != nil {
 		log.Fatal(err)

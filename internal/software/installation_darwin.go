@@ -1,11 +1,17 @@
 package software
 
-func findInstallationYears(software Software) ([]string, error) {
+import (
+	"io/ioutil"
+	"regexp"
+	"strings"
+)
+
+func FindInstallationYears(software Software) []string {
 	var years []string
 
 	// FIXME: new method to get plist, current limits the returned value
-	files, err := ioutil.ReadDir(homeDir + "/Library/Preferences") // gets list of all plist file names
-	check(err)
+	files, err := ioutil.ReadDir(GetHomeDir() + "/Library/Preferences") // gets list of all plist file names
+	Check(err)
 
 	// returns all license year numbers found in plist file names from the files variable
 	for _, f := range files {
@@ -18,7 +24,7 @@ func findInstallationYears(software Software) ([]string, error) {
 		}
 	}
 
-	return years, nil
+	return years
 }
 
 func findProperties(installation Installation) []string {
@@ -42,6 +48,8 @@ func findProperties(installation Installation) []string {
 			"net.vectorworks.vision.license." + installation.Year + ".plist",
 		}
 	}
+
+	return nil
 }
 
 func findDirectories(installation Installation) []string {
@@ -49,15 +57,15 @@ func findDirectories(installation Installation) []string {
 	switch installation.Software {
 	case SoftwareVectorworks:
 		return []string{
-			homeDir + "/Library/Application\\ Support/Vectorworks\\ RMCache/rm" + installation.Year,
-			homeDir + "/Library/Application\\ Support/Vectorworks\\ Cloud\\ Services",
-			homeDir + "/Library/Application\\ Support/Vectorworks/" + installation.Year,
-			homeDir + "/Library/Application\\ Support/vectorworks-installer-wrapper",
+			GetHomeDir() + "/Library/Application\\ Support/Vectorworks\\ RMCache/rm" + installation.Year,
+			GetHomeDir() + "/Library/Application\\ Support/Vectorworks\\ Cloud\\ Services",
+			GetHomeDir() + "/Library/Application\\ Support/Vectorworks/" + installation.Year,
+			GetHomeDir() + "/Library/Application\\ Support/vectorworks-installer-wrapper",
 		}
 	case SoftwareVision:
 		return []string{
-			homeDir + "/Library/Application\\ Support/Vision/" + installation.Year,
-			homeDir + "/Library/Application\\ Support/VisionUpdater",
+			GetHomeDir() + "/Library/Application\\ Support/Vision/" + installation.Year,
+			GetHomeDir() + "/Library/Application\\ Support/VisionUpdater",
 			"/Library/Frameworks/QtConcurrent.framework",
 			"/Library/Frameworks/QtCore.framework",
 			"/Library/Frameworks/QtDBus.framework",
