@@ -1,5 +1,5 @@
 # IDE Settings
-.idea
+**.idea
 
 # Binaries for programs and plugins
 *.exe
@@ -16,3 +16,9 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# OS
+.DS_Store
+
+# Build Binaries
+**MacOS/

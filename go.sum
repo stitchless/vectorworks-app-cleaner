@@ -1,4 +1,4 @@
-github.com/gen2brain/dlgs v0.0.0-20201118155338-03fe7f81ad25 h1:x2nGRhm8HbvCAS4TN6TfsXu3iWTXsuNNfVCNPByyKMc=
-github.com/gen2brain/dlgs v0.0.0-20201118155338-03fe7f81ad25/go.mod h1:/eFcjDXaU2THSOOqLxOPETIbHETnamk8FA/hMjhg/gU=
-github.com/gopherjs/gopherjs v0.0.0-20200217142428-fce0ec30dd00 h1:l5lAOZEym3oK3SQ2HBHWsJUfbNBiTXJDeW2QDxw9AQ0=
-github.com/gopherjs/gopherjs v0.0.0-20200217142428-fce0ec30dd00/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
+github.com/webview/webview v0.0.0-20210201104136-ce27be3bc811 h1:JxTlIhZJh9+B4H74fkixRj9sFf4v4bI67YrWjrsbz0A=
+github.com/webview/webview v0.0.0-20210201104136-ce27be3bc811/go.mod h1:rpXAuuHgyEJb6kXcXldlkOjU6y4x+YcASKKXJNUhh0Y=
+golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c h1:VwygUrnw9jn88c4u8GD3rZQbqrP/tgas88tPUbBxQrk=
+golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
