@@ -1,4 +1,4 @@
-package main
+package software
 
 func findInstallationYears(software Software) ([]string, error) {
 	var years []string

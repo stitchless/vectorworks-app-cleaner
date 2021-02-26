@@ -1,4 +1,4 @@
-package main
+package software
 
 type LicenseOpts struct {
 	serial map[string]string `plist:"NNA User License"`

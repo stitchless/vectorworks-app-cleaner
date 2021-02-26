@@ -1,4 +1,4 @@
-package main
+package software
 
 import (
 	"golang.org/x/sys/windows/registry"

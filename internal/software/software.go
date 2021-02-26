@@ -1,4 +1,4 @@
-package main
+package software
 
 type Software = string
 const (

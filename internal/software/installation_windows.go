@@ -1,4 +1,4 @@
-package main
+package software
 
 import (
 	"io/ioutil"
@@ -7,7 +7,7 @@ import (
 	"regexp"
 )
 
-func findInstallationYears(software Software) []string {
+func FindInstallationYears(software Software) []string {
 	var appdataFolder string
 	var years []string
 

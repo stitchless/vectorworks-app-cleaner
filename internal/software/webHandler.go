@@ -1,41 +1,69 @@
-package main
+package software
 
 import (
+	"html/template"
 	"net/http"
-	"sync"
 )
+
+type htmlValues struct {
+	Title       string
+	Preloader   bool
+	Description string
+	Softwares   []Software
+	FormData    FormData
+}
+
+type FormData struct {
+	Name   string
+	Year   string
+	Serial string
+}
 
 // TODO: Determine if VCS is installed
 
-var doOnce sync.Once
-var preloader bool
+var tmpl *template.Template
+
+func GenerateTemplates() {
+	// funcMap needed in order to define custom functions within go templates
+	funcMap := template.FuncMap{
+		// Increments int by 1 (Used to illustrate table views)
+		"inc": func (i int) int {
+			return i + 1
+		},
+		"comp": func (val1 string, val2 string) bool {
+			if val1 == val2 {
+				return true
+			}
+			return false
+		},
+		"FindInstallationsBySoftware": FindInstallationsBySoftware,
+	}
+
+	tmpl = template.Must(template.ParseGlob(GetWD() + "/templates/*.html.tmpl")).Funcs(funcMap)
+	template.Must(tmpl.ParseGlob(GetWD() + "/views/*.html.tmpl")).Funcs(funcMap)
+}
 
 // homePageHandler is the initial page with all software information held on it.
 // Each time an action is done the user is returned to this screen
 // From this screen you can edit license info or clean up application data.
-func homePageHandler(w http.ResponseWriter, _ *http.Request) {
-	showPreloader()
-
+func HomePageHandler(w http.ResponseWriter, _ *http.Request) {
 	templateValues := htmlValues{
-		Preloader:   preloader,
+		Preloader:   false,
 		Title:       "Welcome to the Vectorworks Utility Tool",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
-		Softwares: allSoftwares,
+		Softwares:   allSoftwares,
 	}
-
 	err := tmpl.ExecuteTemplate(w, "homePage", templateValues)
-	check(err)
+	Check(err)
 }
 
 // TODO: Show localizations via Tabs
 // TODO: Show Actions as Modals? (No)
 // TODO: Illustrate license types (Private Repo)
-
 // editSerialHandler The screen to chose the user a text field to update a selected serial number
-func editSerialHandler(w http.ResponseWriter, r *http.Request) {
-	showPreloader()
+func EditSerialHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
-	check(err)
+	Check(err)
 	var softwareName string
 	var appYear string
 	var serial string
@@ -53,27 +81,25 @@ func editSerialHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Serve the screen
 	templateValues := htmlValues{
-		Preloader:   preloader,
+		Preloader:   false,
 		Title:       "Welcome to the Vectorworks Utility Tool!",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
-		Softwares: allSoftwares,
+		Softwares:   allSoftwares,
 		FormData: FormData{
-			Name: softwareName,
+			Name:   softwareName,
 			Year:   appYear,
 			Serial: serial,
 		},
 	}
 
 	err = tmpl.ExecuteTemplate(w, "editSerial", templateValues)
-	check(err)
+	Check(err)
 }
 
 // updateSerialHandler will send the filled in text field and update the serial
 // Once updated, the home homePageHandler is called and the home screen is shown
-func updateSerialHandler(w http.ResponseWriter, r *http.Request) {
-	showPreloader()
+func UpdateSerialHandler(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
-	check(err)
 	var softwareName string
 	var appYear string
 	var serial string
@@ -90,32 +116,24 @@ func updateSerialHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	installation := Installation{
-		Software:    softwareName,
-		Year:        appYear,
+		Software: softwareName,
+		Year:     appYear,
 	}
 
 	replaceOldSerial(installation, serial)
 
 	templateValues := htmlValues{
-		Preloader:   preloader,
+		Preloader:   false,
 		Title:       "Welcome to the Vectorworks Utility Tool!",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
-		Softwares: allSoftwares,
+		Softwares:   allSoftwares,
 		FormData: FormData{
-			Name: softwareName,
+			Name:   softwareName,
 			Year:   appYear,
 			Serial: serial,
 		},
 	}
 
 	err = tmpl.ExecuteTemplate(w, "homePage", templateValues)
-	check(err)
-}
-
-// Sets the Preloader variable
-func showPreloader() {
-	doOnce.Do(func() {
-		preloader = true
-	})
-	preloader = false
+	Check(err)
 }

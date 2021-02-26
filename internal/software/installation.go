@@ -1,17 +1,17 @@
-package main
+package software
 
 type Installation struct {
-	License License
-	Software Software
-	Properties []string
+	License     License
+	Software    Software
+	Properties  []string
 	Directories []string
-	Year string
+	Year        string
 }
 
 func FindInstallationsBySoftware(software Software) ([]Installation, error) {
 	var installations []Installation
 
-	years := findInstallationYears(software)
+	years := FindInstallationYears(software)
 
 	// Attach configs, versions, and app years all into on object then return that object
 	for _, year := range years {
