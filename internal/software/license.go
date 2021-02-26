@@ -1,5 +1,5 @@
 package software
 
-type License struct{
+type License struct {
 	Serial string
 }

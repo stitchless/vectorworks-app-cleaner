@@ -137,3 +137,5 @@ func UpdateSerialHandler(w http.ResponseWriter, r *http.Request) {
 	err = tmpl.ExecuteTemplate(w, "homePage", templateValues)
 	Check(err)
 }
+
+// TODO: Add new method for showing the cleaning of the application.

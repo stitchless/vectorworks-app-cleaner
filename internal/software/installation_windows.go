@@ -1,6 +1,7 @@
 package software
 
 import (
+	"golang.org/x/sys/windows/registry"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -89,4 +90,25 @@ func findDirectories(installation Installation) []string {
 	}
 
 	return nil
+}
+
+func (i Installation) CleanInstallation() {
+	for _, property := range i.Properties {
+		k, _ := registry.OpenKey(registry.CURRENT_USER, property, registry.ALL_ACCESS)
+
+		defer k.Close()
+
+		names, _ := k.ReadSubKeyNames(-1)
+
+		for _, name := range names {
+			_ = registry.DeleteKey(k, name)
+		}
+		_ = registry.DeleteKey(k, "")
+	}
+	// TODO: Check for directory after as a way to verify deletion.
+
+	for _, directory := range i.Directories {
+		_ = os.RemoveAll(directory)
+		// TODO: Implement error checking.
+	}
 }
