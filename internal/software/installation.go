@@ -13,7 +13,7 @@ func FindInstallationsBySoftware(software Software) ([]Installation, error) {
 
 	years := FindInstallationYears(software)
 
-	// Attach configs, versions, and app years all into on object then return that object
+	// Attach configs, versions, and Vectorworks Utility years all into on object then return that object
 	for _, year := range years {
 		installation := Installation{
 			Software:    software,

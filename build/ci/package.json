@@ -1,0 +1,28 @@
+{
+  "name": "vectorworks_utility_build_tools",
+  "version": "0.1.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpeizer/vectorworks-app-cleaner.git"
+  },
+  "author": "Josh Peizer",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/jpeizer/vectorworks-app-cleaner/issues"
+  },
+  "homepage": "https://github.com/jpeizer/vectorworks-app-cleaner#readme",
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-winstaller": "^5.0.0",
+    "fs-extra": "^9.1.0"
+  },
+  "devDependencies": {
+    "electron": "^11.3.0"
+  }
+}

@@ -22,3 +22,8 @@
 
 # Build Binaries
 **MacOS/
+
+
+**node_modules
+
+build/ci/app/*

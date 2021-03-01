@@ -8,7 +8,7 @@ import (
 
 // TODO: https://github.com/electron/windows-installer
 
-// Initialize by generating templates
+// Initialize by generating template
 func init() {
 	software.GenerateTemplates()
 }

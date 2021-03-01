@@ -24,9 +24,9 @@ type FormData struct {
 var tmpl *template.Template
 
 func GenerateTemplates() {
-	// funcMap needed in order to define custom functions within go templates
+	// funcMap needed in order to define custom functions within go template
 	funcMap := template.FuncMap{
-		// Increments int by 1 (Used to illustrate table views)
+		// Increments int by 1 (Used to illustrate table view)
 		"inc": func (i int) int {
 			return i + 1
 		},
@@ -39,8 +39,8 @@ func GenerateTemplates() {
 		"FindInstallationsBySoftware": FindInstallationsBySoftware,
 	}
 
-	tmpl = template.Must(template.ParseGlob(GetWD() + "/templates/*.html.tmpl")).Funcs(funcMap)
-	template.Must(tmpl.ParseGlob(GetWD() + "/views/*.html.tmpl")).Funcs(funcMap)
+	tmpl = template.Must(template.ParseGlob(GetWD() + "/web/template/*.html.tmpl")).Funcs(funcMap)
+	template.Must(tmpl.ParseGlob(GetWD() + "/web/view/*.html.tmpl")).Funcs(funcMap)
 }
 
 // homePageHandler is the initial page with all software information held on it.
@@ -82,7 +82,7 @@ func EditSerialHandler(w http.ResponseWriter, r *http.Request) {
 	// Serve the screen
 	templateValues := htmlValues{
 		Preloader:   false,
-		Title:       "Welcome to the Vectorworks Utility Tool!",
+		Title:       "Welcome to the VectorworksUtility Tool!",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
 		Softwares:   allSoftwares,
 		FormData: FormData{
