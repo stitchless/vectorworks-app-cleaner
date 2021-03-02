@@ -2,10 +2,11 @@ const { shell, app } = require('electron')
 const path = require('path');
 const appPath = path.resolve(__dirname, "../../app")
 
-// app.whenReady().then(() => {
+app.whenReady().then(() => {
     shell.openPath(path.join(appPath, "VectorworksUtility.exe")).then(r => {
         console.log(r)
     })
+});
 
 app.quit()
 
