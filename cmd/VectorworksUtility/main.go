@@ -10,6 +10,7 @@ import (
 
 // Initialize by generating template
 func init() {
+
 	software.GenerateTemplates()
 }
 

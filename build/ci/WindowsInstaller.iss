@@ -5,17 +5,21 @@
 ; you must have a "x64" edition of Windows.
 
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING .ISS SCRIPT FILES!
+#define SourcePath ".\app"
+#define AppName "Vectorworks Utility"
+#define AppExeName "Vectroworks Utility.exe"
+#define AppIconName "VectorWorks.ico"
 
 [Setup]
 AppName=Vectorworks Utility
 AppVersion=0.1.0
 WizardStyle=modern
-DefaultDirName={autopf}\My Program
-DefaultGroupName=My Program
+DefaultDirName={autopf}\Vectorworks Utility
+DefaultGroupName=Vectorworks Utility
 UninstallDisplayIcon={app}\Uninstall.exe
 Compression=lzma2
 SolidCompression=yes
-OutputDir=userdocs:Inno Setup Examples Output
+OutputDir=..\package\
 ; "ArchitecturesAllowed=x64" specifies that Setup cannot run on
 ; anything but x64.
 ArchitecturesAllowed=x64
@@ -25,9 +29,18 @@ ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
 
 [Files]
-Source: "app/VectorworksUtility.exe"; DestDir: "{app}"; DestName: "Vectorworks Utility.exe"
-Source: "app/static"; DestDir: "{app}"
-Source: "app/web"; DestDir: "{app}"
+Source: "app\VectorworksUtility.exe"; DestDir: "{app}"; DestName: "{#AppExeName}"
+Source: "app\static\*"; DestDir: "{app}\static\"; Flags: recursesubdirs
+Source: "app\web\*"; DestDir: "{app}\web\"; Flags: recursesubdirs
+Source: "app\*.dll"; DestDir: "{app}";
+Source: "assets\*.ico"; DestDir: "{app}";
+
+[Tasks]
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; \
+    GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Icons]
-Name: "{group}\My Program"; Filename: "{app}\MyProg.exe"
+Name: "{group}\Vectorworks Utility"; Filename: "{app}\{#AppExeName}"
+
+Name: "{userdesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; \
+    IconFilename: "{app}\{#AppIconName}"; Tasks: desktopicon
