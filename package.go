@@ -19,6 +19,7 @@ func main() {
 	CopyFile("./webview.dll", "./build/ci/app/webview.dll")
 	CopyFile("./WebView2Loader.dll", "./build/ci/app/WebView2Loader.dll")
 	CopyDir("./web", "./build/ci/app/web")
+	CopyDir("./static", "./build/ci/app/static")
 }
 
 func buildApp() error {

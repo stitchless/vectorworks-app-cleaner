@@ -18,4 +18,4 @@ Build: `go build -ldflags="-H windowsgui" -o webview-example.exe`
 Windows ENV needs this to run\
 CheckNetIsolation.exe LoopbackExempt -a -n="Microsoft.Win32WebViewHost_cw5n1h2txyewy"
 
-This repo required go v1.16+
+This repo requires go v1.16+

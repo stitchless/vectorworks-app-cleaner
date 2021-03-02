@@ -27,3 +27,4 @@
 **node_modules
 
 build/ci/app/*
+build/ci/dist/*
