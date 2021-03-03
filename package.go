@@ -8,6 +8,14 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"time"
+)
+
+
+
+var (
+	BuildVersion	string = "0.1.0"
+	BuildTime		string = time.Now().String()
 )
 
 func main() {
@@ -27,7 +35,12 @@ func buildApp() error {
 
 	cmdBuild := &exec.Cmd{
 		Path: goBinary,
-		Args: []string{goBinary, "build", "-o", "./build/ci/app/VectorworksUtility.exe", "-ldflags="+"-H windowsgui", "./cmd/VectorworksUtility/main.go"},
+		Args: []string{
+			goBinary, "build",
+			"-o", "./build/ci/app/VectorworksUtility.exe",
+			"-ldflags="+"-H windowsgui" + " -X main.BuildTime=" + BuildTime + " -X main.BuildVersion=" + BuildVersion,
+			"./cmd/VectorworksUtility/main.go",
+		},
 		Stdout: os.Stdout,
 		Stderr: os.Stderr,
 	}

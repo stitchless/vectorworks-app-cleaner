@@ -8,9 +8,16 @@ import (
 
 // TODO: https://github.com/electron/windows-installer
 
+// Populated by the build process using package.go in the project root directory
+var (
+	// Default value provided to avoice update triggers
+	BuildVersion string = "0.0.0"
+	BuildTime    string = ""
+)
+
 // Initialize by generating template
 func init() {
-
+	software.SearchForUpdate(BuildVersion)
 	software.GenerateTemplates()
 }
 
@@ -32,7 +39,7 @@ func main() {
 func runWebserver() {
 	mux := http.NewServeMux()
 	// Routes
-	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(software.GetWD() + "/static"))))
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir(software.GetWD()+"/static"))))
 	mux.HandleFunc("/", software.HomePageHandler) // Handle home page, also catch all
 	mux.HandleFunc("/editSerial", software.EditSerialHandler)
 	mux.HandleFunc("/updateSerial", software.UpdateSerialHandler)

@@ -41,6 +41,5 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; \
 
 [Icons]
 Name: "{group}\Vectorworks Utility"; Filename: "{app}\{#AppExeName}"
-
 Name: "{userdesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; \
     IconFilename: "{app}\{#AppIconName}"; Tasks: desktopicon

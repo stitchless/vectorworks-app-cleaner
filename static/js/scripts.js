@@ -17,8 +17,6 @@
         hiddenInput.focus().select();
     };
 
-    $(document).mouseup(focusHiddenArea);
-
     ['cut', 'copy', 'paste'].forEach(function(event) {
         document.addEventListener(event, function(e) {
             console.log(event);

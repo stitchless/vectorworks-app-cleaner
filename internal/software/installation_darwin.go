@@ -91,7 +91,7 @@ func findDirectories(installation Installation) []string {
 	return nil
 }
 
-func (i Installation) CleanInstallation() {
+func (i Installation) Clean() {
 	plistPath := GetHomeDir() + "/Library/Preferences/"
 	// Deletes relevant plist files for select software/version
 	for _, plist := range i.Properties {

@@ -27,10 +27,10 @@ func GenerateTemplates() {
 	// funcMap needed in order to define custom functions within go template
 	funcMap := template.FuncMap{
 		// Increments int by 1 (Used to illustrate table view)
-		"inc": func (i int) int {
+		"inc": func(i int) int {
 			return i + 1
 		},
-		"comp": func (val1 string, val2 string) bool {
+		"comp": func(val1 string, val2 string) bool {
 			if val1 == val2 {
 				return true
 			}
@@ -82,7 +82,7 @@ func EditSerialHandler(w http.ResponseWriter, r *http.Request) {
 	// Serve the screen
 	templateValues := htmlValues{
 		Preloader:   false,
-		Title:       "Welcome to the VectorworksUtility Tool!",
+		Title:       "Welcome to the Vectorworks Utility Tool",
 		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
 		Softwares:   allSoftwares,
 		FormData: FormData{
@@ -139,3 +139,37 @@ func UpdateSerialHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 // TODO: Add new method for showing the cleaning of the application.
+
+func deleteHandler(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	Check(err)
+	var softwareName string
+	var appYear string
+
+	for key, value := range r.Form {
+		switch key {
+		case "softwareName":
+			softwareName = value[0]
+		case "appYear":
+			appYear = value[0]
+		}
+	}
+
+	installations, _ := FindInstallationsBySoftware(softwareName)
+	for _, installation := range installations {
+		if installation.Year == appYear {
+			installation.Clean()
+		}
+	}
+
+	// Serve the screen
+	templateValues := htmlValues{
+		Preloader:   false,
+		Title:       "Welcome to the Vectorworks Utility Tool",
+		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
+		Softwares:   allSoftwares,
+	}
+
+	err = tmpl.ExecuteTemplate(w, "editSerial", templateValues)
+	Check(err)
+}

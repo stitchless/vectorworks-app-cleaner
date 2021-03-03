@@ -1,6 +1,7 @@
 package software
 
 type Installation struct {
+	ID			int
 	License     License
 	Software    Software
 	Properties  []string

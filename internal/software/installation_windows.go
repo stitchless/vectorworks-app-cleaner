@@ -1,6 +1,7 @@
 package software
 
 import (
+	"fmt"
 	"golang.org/x/sys/windows/registry"
 	"io/ioutil"
 	"os"
@@ -92,7 +93,8 @@ func findDirectories(installation Installation) []string {
 	return nil
 }
 
-func (i Installation) CleanInstallation() {
+func (i Installation) Clean() {
+	fmt.Println("Hello")
 	for _, property := range i.Properties {
 		k, _ := registry.OpenKey(registry.CURRENT_USER, property, registry.ALL_ACCESS)
 
