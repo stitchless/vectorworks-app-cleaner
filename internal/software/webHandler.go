@@ -39,6 +39,7 @@ func GenerateTemplates() {
 		"FindInstallationsBySoftware": FindInstallationsBySoftware,
 	}
 
+	// Gather templates and parse all found template files
 	tmpl = template.Must(template.ParseGlob(GetWD() + "/web/template/*.html.tmpl")).Funcs(funcMap)
 	template.Must(tmpl.ParseGlob(GetWD() + "/web/view/*.html.tmpl")).Funcs(funcMap)
 }
@@ -158,6 +159,41 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	installations, _ := FindInstallationsBySoftware(softwareName)
 	for _, installation := range installations {
 		if installation.Year == appYear {
+			installation.Clean()
+		}
+	}
+
+	// Serve the screen
+	templateValues := htmlValues{
+		Preloader:   false,
+		Title:       "Welcome to the Vectorworks Utility Tool",
+		Description: "This utility will allow you to make a variety of changes to Vectorworks, Vision, and Vectorworks Cloud Services Desktop App.  Simply select an action from the list below...",
+		Softwares:   allSoftwares,
+	}
+
+	err = tmpl.ExecuteTemplate(w, "editSerial", templateValues)
+	Check(err)
+}
+
+func ClearUserFolder(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	Check(err)
+	var softwareName string
+	var softwareYear string
+
+	for key, value := range r.Form {
+		switch key {
+		case "softwareName":
+			softwareName = value[0]
+		case "softwareYear":
+			softwareYear = value[0]
+		}
+	}
+
+
+	installations, _ := FindInstallationsBySoftware(softwareName)
+	for _, installation := range installations {
+		if installation.Year == softwareYear {
 			installation.Clean()
 		}
 	}

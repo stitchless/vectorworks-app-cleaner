@@ -49,15 +49,33 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <div class="d-flex justify-content-center">
-                                                    <i class="fas fa-trash text-danger mr-2" data-toggle="tooltip"
-                                                       data-placement="top"
-                                                       title="Delete "></i>
-                                                    <form action="/" method="post">
-                                                        <input type="hidden" name="softwareName"
-                                                               value="${softwareName}">
-                                                        <input type="hidden" name="appYear" value="${.Year}}">
-                                                    </form>
+                                                <div class="btn-group dropstart mb-2 me-2">
+                                                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                                            id="{{$softwareName}}-{{.Year}}"
+                                                            aria-haspopup="true"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <span class="fas fa-angle-left dropdown-arrow"></span>
+                                                        <span>Actions</span>
+                                                    </button>
+                                                    <ul class="dropdown-menu py-0" aria-labelledby="{{$softwareName}}-{{.Year}}">
+                                                        <li><a class="dropdown-item rounded-top"
+                                                               href="/CleanUser?softwareName={{$softwareName}}&softwareYear={{.Year}}">
+                                                                Clear User Folder
+                                                            </a>
+                                                        <li><a class="dropdown-item"
+                                                               href="/CleanUser?softwareName={{$softwareName}}&softwareYear={{.Year}}">
+                                                                Clear User Folder
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <div class="dropdown-divider"></div>
+                                                        </li>
+                                                        <li><a class="dropdown-item rounded-bottom"
+                                                               href="/deleteHandler?softwareName={{$softwareName}}&softwareYear={{.Year}}">
+                                                                Nuke Install Files
+                                                            </a>
+                                                        </li>
+                                                    </ul>
                                                 </div>
                                             </td>
                                         </tr>

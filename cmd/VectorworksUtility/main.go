@@ -43,6 +43,7 @@ func runWebserver() {
 	mux.HandleFunc("/", software.HomePageHandler) // Handle home page, also catch all
 	mux.HandleFunc("/editSerial", software.EditSerialHandler)
 	mux.HandleFunc("/updateSerial", software.UpdateSerialHandler)
+	mux.HandleFunc("/userFolder", software.ClearUserFolder)
 
 	// Configure the webserver
 	webServer := &http.Server{
