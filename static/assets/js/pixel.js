@@ -39,24 +39,6 @@ d.addEventListener("DOMContentLoaded", function(event) {
         }, 1500);
     }
 
-    if (d.body.clientWidth >= breakpoints.lg) {
-        [].slice.call(d.querySelectorAll('.nav-item.dropdown')).map(function(el) {
-            el.addEventListener('mouseover', function () {
-                var dropdown = new bootstrap.Dropdown(this.querySelector(':scope > .dropdown-toggle'));
-                dropdown.toggle();
-                this.classList.add('show');
-            });
-        });
-
-        [].slice.call(d.querySelectorAll('.nav-item.dropdown')).map(function (el) {
-            el.addEventListener('mouseout', function () {
-                var dropdown = new bootstrap.Dropdown(this.querySelector(':scope > .dropdown-toggle'));
-                dropdown.toggle();
-                this.classList.remove('show');
-            })
-        });
-    }
-
     if (d.querySelector('.headroom')) {
         var headroom = new Headroom(document.querySelector("#navbar-main"), {
             offset: 0,
@@ -66,6 +48,30 @@ d.addEventListener("DOMContentLoaded", function(event) {
             },
         });
         headroom.init();
+    }
+
+    // dropdowns to show on hover when desktop
+    if (d.body.clientWidth > breakpoints.lg) {
+        var dropdownElementList = [].slice.call(document.querySelectorAll('.navbar .dropdown-toggle'))
+        dropdownElementList.map(function (dropdownToggleEl) {
+            var dropdown = new bootstrap.Dropdown(dropdownToggleEl);
+            var dropdownMenu = d.querySelector('.dropdown-menu[aria-labelledby="' + dropdownToggleEl.getAttribute('id') + '"]');
+
+            dropdownToggleEl.addEventListener('mouseover', function () {
+                dropdown.show();
+            });
+            dropdownToggleEl.addEventListener('mouseout', function () {
+                dropdown.hide();
+            });
+
+            dropdownMenu.addEventListener('mouseover', function () {
+                dropdown.show();
+            });
+            dropdownMenu.addEventListener('mouseout', function () {
+                dropdown.hide();
+            });
+            
+        });
     }
 
     [].slice.call(d.querySelectorAll('[data-background]')).map(function(el) {
@@ -81,15 +87,15 @@ d.addEventListener("DOMContentLoaded", function(event) {
     });
 
     // Tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
+      return new bootstrap.Tooltip(tooltipTriggerEl)
     })
 
     // Popovers
-    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="popover"]'))
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-    return new bootstrap.Popover(popoverTriggerEl)
+      return new bootstrap.Popover(popoverTriggerEl)
     })
 
     // Datepicker
@@ -98,6 +104,12 @@ d.addEventListener("DOMContentLoaded", function(event) {
         return new Datepicker(el, {
             buttonClass: 'btn'
           });
+    })
+
+    // Toasts
+    var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+    var toastList = toastElList.map(function (toastEl) {
+        return new bootstrap.Toast(toastEl)
     })
 
     if(d.querySelector('.input-slider-container')) {
@@ -127,7 +139,6 @@ d.addEventListener("DOMContentLoaded", function(event) {
     }
 
     if (d.getElementById('input-slider-range')) {
-        console.log(d.getElementById('input-slider-range'));
         var c = d.getElementById("input-slider-range"),
             low = d.getElementById("input-slider-range-value-low"),
             e = d.getElementById("input-slider-range-value-high"),
