@@ -1,21 +1,22 @@
 vectorworks-app-cleaner
 
-Running this software will remove files that may or may not be associated with Vectorworks products.  Please use at your own risk.
+This software will remove files on your harddrive without confirmation.  Please understand what is being done before running this software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+## The Software
 
+This software is made specifically for the Vectorworks application suite and used in order to complete otherwise time consuming tasks
 
-required dlls: `webview.dll` `WebView2Loader.dll`
-
+## Windows:
+Windows requires the following dlls: `webview.dll` `WebView2Loader.dll`
 Build: `go build -ldflags="-H windowsgui" -o webview-example.exe`
 
-Windows ENV needs this to run\
+```cmd
+# Windows needs this line run in order to use the application
 CheckNetIsolation.exe LoopbackExempt -a -n="Microsoft.Win32WebViewHost_cw5n1h2txyewy"
+```
+
+There is also a package script that will place everything within the build/ci folder.
+
+This workflow will be optimized in the coming days.
 
 This repo requires go v1.16+
