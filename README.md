@@ -1,3 +1,5 @@
+### Due to limitations of webview I have moved this effort to go-astilectron.  If changes are made and these blocking issues are resolved, I may return to this method.
+
 vectorworks-app-cleaner
 
 Running this software will remove files that may or may not be associated with Vectorworks products.  Please use at your own risk.
